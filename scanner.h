@@ -15,6 +15,8 @@ typedef enum {
 	Token_plus;					//operation of -
 	Token_division;				//operation of /
 	Token_multiply;				//operation of *
+	Token_power;				//operation of **
+	Token_modulo;				//operation of %
 	
 	//boolean asociated tokens
 	Token_less;					//operation of <
@@ -23,6 +25,8 @@ typedef enum {
 	Token_greater_equal;		//operation of >=
 	Token_equal;				//operation of ==
 	Token_not_equal;			//operation of !=
+	Token_and;					//operation of &
+	Token_or;					//operation of ^ - means XOR (exlusive OR)
 
 }	token_t;
 
