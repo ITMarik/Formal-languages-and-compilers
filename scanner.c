@@ -15,3 +15,12 @@
 //this function saves to field every possible keyword that may occur
 int Load_Keyword (token *load, ) {
 	char *K_Words[] = {}
+
+int get_token(FILE *fd, token *t) {
+	
+	int a = 0;
+
+	while (true) {
+		a = getc(fd);
+		
+		switch ();
