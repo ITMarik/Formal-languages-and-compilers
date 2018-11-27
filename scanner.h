@@ -1,39 +1,66 @@
-#include <error_h.h>
+//Hlavickovy subor pre scanner.c
 
-#ifndef SCANNER_H
-#define SCANNER_H
+#ifndef scanner_h
+#define scanner_h
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <ctype.h>
 typedef enum {
-	//list of all possible tokens named by their role
+    START,
+    ID,
+    CL,
+    LBRACKET,
+    RBRACKET,
+    PLUS,
+    MINUS,
+    COMMA,
+    DOT,
+    LESS,
+    GREATER,
+    TIMES,
+    EQUALS,
+    DIV,
+    SEMICOLON,
+    HASH,
+    BLOCK,
+    NECO,
+    QUOTE,
+    EOL,
+    EXCL,
+    QUERY,
+    ONE,
+    ERROR,
+    Q1,
+    Q2,
+    Q3,
+    Q4,
+    Q5,
+    RL,
+    DOUBLE,
+    EXP,
+    DL,
+    DL2,
+    ID2,
+    GE,
+    LE,
+    EXE,
+    E_OF,
+    EE
+} automat_type;
+//vsechny stavy automatu, snad :D
 
-	//file asociated tokens
-	TOKEN_EndOfFile;			//file has ended
-	TOKEN_EndOfLine;			//line has ended - "\n"
-	
-	//mathematical operating asociated tokens
-	Token_minus;				//operation of +
-	Token_plus;					//operation of -
-	Token_division;				//operation of /
-	Token_multiply;				//operation of *
-	Token_power;				//operation of **
-	Token_modulo;				//operation of %
-	
-	//boolean asociated tokens
-	Token_less;					//operation of <
-	Token_less_equal;			//operation of <=
-	Token_greater;				//operation of >
-	Token_greater_equal;		//operation of >=
-	Token_equal;				//operation of ==
-	Token_not_equal;			//operation of !=
-	Token_and;					//operation of &
-	Token_or;					//operation of ^ - means XOR (exlusive OR)
+char *keywords[] = {"def", "do", "else", "end", "if", "nil", "then", "while" };
 
-}	token_t;
+typedef struct
+{
+    char *string_value;
+    automat_type type;
+    int size_alloc;
+    int integer; // pre dlzku
+    double decimal;
+}token_t;
 
-typedef struct {
-	token_t type;  				//load our tokens and give them their actual type
-} token;
-
-int get_token(token *load);
+int get_token(token_t* loaded_token);
 
 #endif
