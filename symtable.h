@@ -7,7 +7,7 @@
 #include <stdbool.h>
 
 typedef enum {
-    TYPE_UNDEFINED,
+    TYPE_NIL,
     TYPE_INT,
     TYPE_DOUBLE,
     TYPE_STRING,
