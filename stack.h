@@ -1,6 +1,8 @@
-#ifndef stack_t_LIBRARY_H
-#define stack_t_LIBRARY_H
+#ifndef stack_h
+#define stack_h
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 
 typedef struct stack_i
@@ -11,17 +13,19 @@ typedef struct stack_i
 
 typedef struct stack
 {
-    stack_i *top;
+	stack_i *top;
 } stack_t;
 
 
 
 void stack_t_init(stack_t* stack);
 
-bool stack_push(stack_t* stack, void *data_type);
+void stack_push(stack_t* stack, void *data_type);
+
+void stackPop(stack_t *stack);
 
 void stack_top(stack_t* stack);
 
-void stack_t_free(stack_t* stack);
+void stack_free(stack_t* stack);
 
 #endif //IFJ 2018 stack_H

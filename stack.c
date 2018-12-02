@@ -1,7 +1,3 @@
-
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "stack.h"
 
 void stack_t_init(stack_t* stack)
@@ -13,6 +9,7 @@ void stack_t_init(stack_t* stack)
 }
 
 void stack_push(stack_t* stack, void *data) {
+    
     stack_i* new_item = (stack_i*)malloc(sizeof(stack_i));
 
     if (new_item == NULL)
@@ -28,8 +25,9 @@ void stack_push(stack_t* stack, void *data) {
 
 void stackPop(stack_t *stack) {
 
-    if (stack->top != NULL )
-        stack->top = s->top->next;
+    stack_i tmp = stack->top;
+    stack->top = stack->top->next;
+    free(tmp);
 }
 
 void stack_top(stack_t* stack)
@@ -37,7 +35,9 @@ void stack_top(stack_t* stack)
     return  stack->top->data_type;
 }
 
-void stack_t_free(stack_t* stack)
+void stack_free(stack_t* stack)
 {
-    while(stack_t_pull(stack));
+    while(stack->top != NULL) {
+        stackPop(stack);
+    }
 }
