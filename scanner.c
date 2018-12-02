@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <ctype.h>
 #include "scanner.h"
 
@@ -41,7 +42,9 @@ int string_add (token_t *xx, char c) {
     return OK;
 }
 
-/// plus dalsie potencionalne pomocné funkcie
+int compare( token_t *xx, char* yy) {
+    return strcmp(xx->string_value, yy);
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,17 +52,15 @@ int string_add (token_t *xx, char c) {
 
 int getToken(token_t *token) {
 // hlavni funkce lexikalniho analyzatoru
-  //  printf("pred automat type \n");
+
     automat_type state = START;
     int i = 0; //načitanie tokenu
     string_clean(token);
-  //  printf("po clean \n");
 
-    while (1) { //jednicka pro nekonecnou smycku zatim
-      //  printf("while \n");
+    while ((i = getchar()) != EOF) { //jednicka pro nekonecnou smycku zatim
 
-        i = getchar();
-     //   printf("TITO\n");
+        printf("Sme vo while ♥ \n\n");
+
         switch (state) {
 
             case START:
@@ -67,9 +68,8 @@ int getToken(token_t *token) {
                     return EOL;
                 if (isspace(i)) {
                     state = START;
-             //   } else if (i == '/') { //  delenie
-             //       state = ONE;
                 } else if (isalpha(i) || i == '_') { // IDentifikator
+                    printf("Je to identifikator !!! \n");
                     string_add(token, i);
                     state = ID;
                 } else if (i == '0') {
@@ -166,6 +166,14 @@ int getToken(token_t *token) {
                     state = START;
                 else
                     i = getchar();
+                if (compare(token, "def") == 0) return DEF;			// klucove slova
+                else if (compare(token, "do") == 0) return DO;
+                else if (compare(token, "else") == 0) return ELSE;
+                else if (compare(token, "end") == 0) return END;
+                else if (compare(token, "if") == 0) return IF;
+                else if (compare(token, "nil") == 0) return NIL;
+                else if (compare(token, "then") == 0) return THEN;
+                else if (compare(token, "while") == 0) return WHILE;
                 break;
 
             case DOUBLE: {
@@ -330,34 +338,27 @@ int getToken(token_t *token) {
                 break;
         }
     }
-}
+
+    return E_OF;
+ } // end of get_token ...38
+
 
 
 int main (int argc, char ** argv){
-    FILE *source;
+    /*FILE *source;*/
     int need;
 
-    source = fopen(argv[1], "r");
     token_t next_token;
     string_init(&next_token);
 
-    if(argc == 1 ){
-        return ERROR;
-    }
-    if (source == NULL){
-        printf("Subor sa nepodarilo otvorit\n");
-        return ERROR;
-    }
-
     do {
-       // printf("Ano \n");
+        printf("\n \n");
+        printf("Ano ..dostali sme sa do suboru....... \n");
         need = getToken(&next_token);
-        //printf("po need \n");
-        printf(" ..........Tu je niečo napisane  \n");
-    } while (need != 39); //EOF
+        printf("number: %d  \t----length: %d\t----buffer: %s   \n", need, next_token.size_alloc, next_token.string_value);
+    } while (need != E_OF); //EOF
 
     string_free(&next_token);
-    fclose(source);
 
     return 0;
 }
