@@ -3,47 +3,54 @@
 
 #include "strings.h"
 
-#define STRING_LEN 8 //pocatecni alokace - na 8 bitu
+#define STRING_LENGTH 8 //pocatecni alokace - na 8 bitu
 #define S_OK 0
 #define S_WRONG 1
 
 
-bool string_init (dynamic_string *s)
+void string_clear (strings *s)
 {
-	if (!(s->str = (char *) malloc(STRING_LEN)))
-	{
-		return false;
-	}
-	string_clear (s);
-	s->size = STRING_LEN;
-	return true;
+    s->length = 0;
+    s->str[0] = '\0';
 }
 
-int string_add (dynamic_string *s, char c)
+bool string_init (strings *s)
+{
+	if (!(s->str = (char *) malloc(STRING_LENGTH)))
+	{
+		return S_WRONG;
+	}
+	string_clear (s);
+	s->size = STRING_LENGTH;
+	return S_OK;
+}
+
+int string_add (strings *s, char c)
 {
 	unsigned int new;
-	if (s->len + 1 >= s->size)
+	if (s->length + 1 >= s->size)
 	{
-		new = s->len + STRING_LEN;
+		new = s->length + STRING_LENGTH;
 		if (!(s->str = (char *) realloc (s->str, new)))
 		{
 			return S_WRONG;
 		}
 	s->size = new;
 	}
-	s->str[s->len+1] = c;
-	s->str[s->len]= '\0';
+	s->str[s->length] = c;
+	S->length++;
+	s->str[s->length]= '\0';
 	return S_OK;	
 }
 
-int string_cmp (dynamic_string *dynamic_string, const char * const_string)
+int string_cmp (strings *strings, const char * const_string)
 {
-	return strcmp (dynamic_string->str, const_string);
+	return strcmp (strings->str, const_string);
 }
 
-bool string_cp (dynamic_string *ted, dynamic_string *pot)
+bool string_cp (strings *ted, strings *pot)
 {
-	unsigned int new = ted->len;
+	unsigned int new = ted->length;
 	if (new >= pot->size)
 	{
 		if (!(pot->str = (char *) realloc (pot->str, new +1)))
@@ -53,35 +60,29 @@ bool string_cp (dynamic_string *ted, dynamic_string *pot)
 		pot->size = new + 1;
 	}
 	strcpy(pot->str,ted->str);
-	pot->len = new;
+	pot->length = new;
 	return true;
 }
 
-void string_free (dynamic_string *s)
+void string_free (strings *s)
 {
 	free (s->str);
 }
 
-bool string_add_const (dynamic_string *s, const char *const_string)
+bool string_add_const (strings *s, const char *const_string)
 {
-	unsigned int const_string_len = (unsigned int) strlen(const_string);
-	if (s->len + const_string_len +1 >= s->size)
+	unsigned int const_STRING_LENGTH = (unsigned int) strlength(const_string);
+	if (s->length + const_STRING_LENGTH +1 >= s->size)
 	{
-		unsigned int new = s->len +const_string_len +1;
+		unsigned int new = s->length +const_STRING_LENGTH +1;
 		if (!(s->str = (char *) realloc(s->str, new)))
 		{
 			return false;
 		}
 		s->size = new;
 	}
-	s->len += const_string_len;
+	s->length += const_STRING_LENGTH;
 	strcat (s->str, const_string);
-	s->str[s->len] = '\0';
+	s->str[s->length] = '\0';
 	return
-}
-
-void string_clear (dynamic_string *s)
-{
-    s->len = 0;
-    s->str[s->len] = '\0';
 }
