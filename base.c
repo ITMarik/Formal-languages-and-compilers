@@ -3,6 +3,8 @@
 #include <string.h>
 #include <math.h>
 
+#include "base.h"
+
 int BinaryToDecimal(long long n)
 {
     int decimalNumber = 0, i = 0, zbytek;
