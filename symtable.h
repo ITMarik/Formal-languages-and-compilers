@@ -1,9 +1,7 @@
-#ifndef  _BSTSYMTABLE_H
-#define  _BSTSYMTABLE_H
+#ifndef  _SYMTABLE_H
+#define  _SYMTABLE_H
 
 #include <stdbool.h>
-
-// #include "dynamic_string"
 
 typedef enum {
     TYPE_UNDEFINED,
@@ -15,8 +13,7 @@ typedef enum {
 
 typedef struct {
     Data_Type type;
-    bool defined;
-    // Dynamic_string *params;     //params in string for TO DO
+    bool defined;   
     char *identifier;
 }TData ;
 
@@ -29,45 +26,14 @@ typedef struct tBSTsymtable {
 
 /*functions*/
 
-/**
- * Function initializes BStree
- *
- * @param tBSTNodePtr pointer to root of tree
- */
-void BST_symtable_init (tBSTNodePtr *);
+void symtable_init (tBSTNodePtr *);
 
-/**
- * Function finds symbol and returns its data node
- *
- * @param tBSTNodePtr pointer to root of tree
- * @param K Node Identifier
- * @return NULL if symbol doesnt exist or pointer to Data node
- */
-TData *BST_symtable_Search (tBSTNodePtr *, char K);
+TData *symtable_Search (tBSTNodePtr *, char K);
 
-/**
- * Function Appends symbol to the BStree
- *
- * @param tBSTNodePtr pointer to root of tree
- * @param K Node Identifier
- * @param Content Node Content
- * @return 1 if succesful 0 if not
- */
-bool BST_symtable_Insert (tBSTNodePtr *,char K, TData Content);
+bool symtable_Insert (tBSTNodePtr *,char K, TData Content);
 
-/**
- * Function Deletes symbol node from BStree
- * @param tBSTNodePtr pointer to root of tree
- * @param K Node Identifier
- * @return 1 if succesful 0 if not
- */
-bool BST_symtable_Delete (tBSTNodePtr *,char K);
+bool symtable_Delete (tBSTNodePtr *,char K);
 
-/**
- * Function frees all resources allocated for BStree
- *
- * @param tBSTNodePtr pointer to root of tree
- */
-void BST_symtable_Free (tBSTNodePtr *);
+void symtable_Free (tBSTNodePtr *);
 
 #endif //_BSTSYMTABLE_H
