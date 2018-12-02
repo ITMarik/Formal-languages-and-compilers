@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include <err.h>
 
 void vypis_hodnotu(int navratova_hodnota) {
 
