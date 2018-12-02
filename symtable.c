@@ -9,20 +9,21 @@ void symtable_init (NodePtr *RootPtr){
 
 void symtable_Insert (NodePtr *RootPtr,char K, TData Content){
     
-    if (!(*RootPtr)) {
-        if (!(*RootPtr = malloc (sizeof(struct tBSTNode))))
+    if (*RootPtr == NULL) {
+    	*RootPtr = malloc(sizeof(struct TNode));
+		if (RootPtr == NULL)
             return;
         (*RootPtr)->LPtr = NULL;
         (*RootPtr)->RPtr = NULL;
         (*RootPtr)->Key = K;
-        (*RootPtr)->BSTNodeCont = Content;
+        (*RootPtr)->data = Content;
     }
     else if ((*RootPtr)->Key > K)
         symtable_Insert (&(*RootPtr)->LPtr, K, Content);
     else if ((*RootPtr)->Key < K)
         symtable_Insert (&(*RootPtr)->RPtr, K, Content);
     else
-        (*RootPtr)->BSTNodeCont = Content;
+        (*RootPtr)->data = Content;
 }
 
 
@@ -90,8 +91,8 @@ void symtable_Delete (NodePtr *RootPtr, char K) {
 void symtable_Free (NodePtr *RootPtr){
     if(*RootPtr != NULL)
     {
-        BST_symtable_Free(&(*RootPtr)->LPtr);
-        BST_symtable_Free(&(*RootPtr)->RPtr);
+        symtable_Free(&(*RootPtr)->LPtr);
+        symtable_Free(&(*RootPtr)->RPtr);
         free(*RootPtr);
         *RootPtr = NULL;
     }
