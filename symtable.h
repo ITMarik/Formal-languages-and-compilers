@@ -6,14 +6,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-typedef enum {
-    TYPE_NIL,
-    TYPE_INT,
-    TYPE_DOUBLE,
-    TYPE_STRING,
-    TYPE_BOOL,
-}Data_Type ;
-
 typedef struct {
     Data_Type type;
     bool defined;   
