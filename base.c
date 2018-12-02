@@ -12,25 +12,26 @@ int BinaryToDecimal(long long n)
         n /= 10;
         decimalNumber += zbytek*pow(2,i);
         ++i;
-    }
+    }	
     return decimalNumber;
 }
 
 
-int DecimalToOctal(int decimalNumber)
+long long convertOctalToDecimal(int octalNumber)
 {
-    int octal_num = 0, i = 1;	
+    int decimalNumber = 0, i = 0;
 
-    while (decimalNumber != 0)
+    while(octalNumber != 0)
     {
-        octal_num += (decimalNumber % 8) * i;
-        decimalNumber /= 8;
-        i *= 10;
+        decimalNumber += (octalNumber%10) * pow(8,i);
+        ++i;
+        octalNumber/=10;
     }
 
-    return octal_num;
-}
+    i = 1;
 
+    return decimalNumber;
+}
 
 int hexadecimalToDecimal(char hexVal[]) 
 {    
