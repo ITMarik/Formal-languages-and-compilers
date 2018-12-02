@@ -10,7 +10,7 @@ void stack_t_init(stack_t* stack)
 
 void stack_push(stack_t* stack, void *data) {
     
-    stack_i* new_item = (stack_i*)malloc(sizeof(stack_i));
+    stack_i *new_item = malloc(sizeof(struct stack_i));
 
     if (new_item == NULL)
         return false;
@@ -25,7 +25,9 @@ void stack_push(stack_t* stack, void *data) {
 
 void stackPop(stack_t *stack) {
 
-    stack_i tmp = stack->top;
+    stack_i *tmp = NULL;
+
+    tmp = stack->top;
     stack->top = stack->top->next;
     free(tmp);
 }
