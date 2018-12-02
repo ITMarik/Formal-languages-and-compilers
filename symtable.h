@@ -18,23 +18,23 @@ typedef struct {
     char *identifier;
 }TData ;
 
-typedef struct tBSTsymtable {
+typedef struct TNode {
     char Key;
     TData data;
-    struct tBSTsymtable * LPtr;
-    struct tBSTsymtable * RPtr;
-} *tBSTNodePtr ;
+    struct TNode * LPtr;
+    struct TNode * RPtr;
+} *NodePtr ;
 
 /*functions*/
 
-void symtable_init (tBSTNodePtr *);
+void symtable_init (NodePtr *);
 
-TData *symtable_Search (tBSTNodePtr *, char K);
+TData *symtable_Search (NodePtr *, char K);
 
-bool symtable_Insert (tBSTNodePtr *,char K, TData Content);
+void symtable_Insert (NodePtr *,char K, TData Content);
 
-bool symtable_Delete (tBSTNodePtr *,char K);
+void symtable_Delete (NodePtr *,char K);
 
-void symtable_Free (tBSTNodePtr *);
+void symtable_Free (NodePtr *);
 
 #endif //_SYMTABLE_H

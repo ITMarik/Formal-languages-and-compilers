@@ -4,14 +4,14 @@
 
 #include "symtable.h"
 
-void symtable_init (tBSTNodePtr *RootPtr){
+void symtable_init (NodePtr *RootPtr){
 
     if (RootPtr == NULL)
         return;
     *RootPtr = NULL;
 }
 
-void symtable_Insert (tBSTNodePtr *RootPtr,char K, TData Content){
+void symtable_Insert (NodePtr *RootPtr,char K, TData Content){
     
     if (!(*RootPtr)) {
         if (!(*RootPtr = malloc (sizeof(struct tBSTNode))))
@@ -30,18 +30,16 @@ void symtable_Insert (tBSTNodePtr *RootPtr,char K, TData Content){
 }
 
 
-TData *symtable_Search (tBSTNodePtr *RootPtr, char K){
+TData *symtable_Search (NodePtr *RootPtr, char K){
     if(RootPtr != NULL){
         if((*RootPtr)->Key == K){
             return &(*RootPtr)->data;
         }
         else{
-            if((*RootPtr)->Key > K){
-                return BST_symtable_Search(&((*RootPtr)->LPtr), K);
-            }
-            else{
-                return BST_symtable_Search(&((*RootPtr)->RPtr), K);
-            }
+            if((*RootPtr)->Key > K)
+                return symtable_Search(&((*RootPtr)->LPtr), K);
+            else
+                return symtable_Search(&((*RootPtr)->RPtr), K);
         }
     }
     else{
@@ -50,7 +48,7 @@ TData *symtable_Search (tBSTNodePtr *RootPtr, char K){
 }
 
 
-void ReplaceByRightmost (tBSTNodePtr PtrReplaced, tBSTNodePtr *RootPtr){
+void ReplaceByRightmost (NodePtr PtrReplaced, NodePtr *RootPtr){
     if(*RootPtr != NULL)
     {
         if((*RootPtr)->RPtr != NULL)
@@ -61,7 +59,7 @@ void ReplaceByRightmost (tBSTNodePtr PtrReplaced, tBSTNodePtr *RootPtr){
         {
             PtrReplaced->Key = (*RootPtr)->Key;
             PtrReplaced->data = (*RootPtr)->data;
-            tBSTNodePtr helpling = *RootPtr;
+            NodePtr helpling = *RootPtr;
             *RootPtr = (*RootPtr)->LPtr;
             free(helpling);
         }
@@ -69,16 +67,15 @@ void ReplaceByRightmost (tBSTNodePtr PtrReplaced, tBSTNodePtr *RootPtr){
 }
 
 
-bool symtable_Delete (tBSTNodePtr *RootPtr, char K){
+void symtable_Delete (NodePtr *RootPtr, char K) {
+    
     if(*RootPtr != NULL){
-        if((*RootPtr)->Key < K){
-            BST_symtable_Delete(&(*RootPtr)->RPtr, K);
-        }
-        else if((*RootPtr)->Key > K){
-            BST_symtable_Delete(&(*RootPtr)->LPtr, K);
-        }
+        if((*RootPtr)->Key < K)
+            symtable_Delete(&(*RootPtr)->RPtr, K);
+        else if((*RootPtr)->Key > K)
+            symtable_Delete(&(*RootPtr)->LPtr, K);
         else{
-            tBSTNodePtr helpling = *RootPtr;
+            NodePtr helpling = *RootPtr;
             if(helpling->LPtr == NULL){
                 *RootPtr = helpling->RPtr;
                 free(helpling);
@@ -87,19 +84,14 @@ bool symtable_Delete (tBSTNodePtr *RootPtr, char K){
                 *RootPtr = helpling->LPtr;
                 free(helpling);
             }
-            else{
+            else
                 ReplaceByRightmost (*RootPtr, (&(*RootPtr)->LPtr));
-            }
         }
-        return true;
-    }
-    else{
-        return false;
     }
 }
 
 
-void symtable_Free (tBSTNodePtr *RootPtr){
+void symtable_Free (NodePtr *RootPtr){
     if(*RootPtr != NULL)
     {
         BST_symtable_Free(&(*RootPtr)->LPtr);
