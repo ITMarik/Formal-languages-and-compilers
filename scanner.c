@@ -2,7 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
+
 #include "scanner.h"
+#include "err.h"
+
+//17.27
 
 #define string_length 10
 #define OK 0
@@ -47,19 +52,89 @@ int compare( token_t *xx, char* yy) {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
+
+int BinaryToDecimal(long long n)
+{
+    int decimalNumber = 0, i = 0, zbytek;
+    while (n!=0)
+    {
+        zbytek = n%10;
+        n /= 10;
+        decimalNumber += zbytek*pow(2,i);
+        ++i;
+    }
+    return decimalNumber;
+}
+
+
+long long convertOctalToDecimal(int octalNumber)
+{
+    int decimalNumber = 0, i = 0;
+
+    while(octalNumber != 0)
+    {
+        decimalNumber += (octalNumber%10) * pow(8,i);
+        ++i;
+        octalNumber/=10;
+    }
+
+    i = 1;
+
+    return decimalNumber;
+}
+
+
+// Function to convert hexadecimal to decimal
+int hexadecimalToDecimal(char hexVal[])
+{
+    int len = strlen(hexVal);
+
+    // Initializing base value to 1, i.e 16^0
+    int base = 1;
+
+    int dec_val = 0;
+
+    // Extracting characters as digits from last character
+    for (int i=len-1; i>=0; i--)
+    {
+        if (hexVal[i]>='0' && hexVal[i]<='9')
+        {
+            dec_val += (hexVal[i] - 48)*base;
+
+            base = base * 16;
+        }
+
+        else if (hexVal[i]>='A' && hexVal[i]<='F')
+        {
+            dec_val += (hexVal[i] - 55)*base;
+
+            base = base*16;
+        }
+    }
+
+    return dec_val;
+}
+
+
+/// plus dalsie potencionalne pomocné funkcie
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 int getToken(token_t *token) {
 // hlavni funkce lexikalniho analyzatoru
 
+    printf("Mimo WHILE !!!!! \n ");
+
     automat_type state = START;
-    int i = 0; //načitanie tokenu
+    int i = 0; //načítanie tokenu
+    int helper ; //pomocna pri '=begin' r. 336  / '=end
     string_clean(token);
 
     while ((i = getchar()) != EOF) { //jednicka pro nekonecnou smycku zatim
 
-        printf("Sme vo while ♥ \n\n");
+        printf("Sme vo while ♥ \n\n");  // vymazať !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         switch (state) {
 
@@ -73,6 +148,7 @@ int getToken(token_t *token) {
                     string_add(token, i);
                     state = ID;
                 } else if (i == '0') {
+                    string_add(token, i);
                     i = getchar();
                     if (!isdigit(i)) {
                         string_add(token, '0');
@@ -111,7 +187,7 @@ int getToken(token_t *token) {
                 } else if (i == '/') {
                     string_add(token, i);
                     return DIV;
-                } else if (i == '=') { // =
+                } else if (i == '=') {
                     string_add(token, i);
                     state = EQUALS;
                 } else if (i == ';') {
@@ -120,13 +196,11 @@ int getToken(token_t *token) {
                 } else if (i == '#') {
                     string_add(token, i);
                     state =  HASH;
-               // } else if (i == "=begin") { // mam jakysi neblahy pocit jestli tohle vubec pujde? jestli to neprijima jen po jednotlivych znacich?
-               //     state = BLOCK;
                 } else if (i == 92) {
                     string_add(token, i);
                     return NECO;    // " \"
-                } else if (i == '"') {
-                    state = QUOTE;
+                } else if (i == '\"') {
+                    state = 17;
                 } else if (i == 10) {
                     string_add(token, i);//nebo mozna tam dat '/n' ?
                     return EOL;
@@ -142,11 +216,34 @@ int getToken(token_t *token) {
 
             case HASH: { // tu je riadkovy komentar
                 i = getchar();
+                string_add(token, i);
                 if(i != '\n'){
                     state = HASH;
                 }
                 state = START;
                 break;
+            }
+
+            case BLOCK:{ // blokový komentár
+                i = getchar();
+                string_add(token, i);
+                if(i == '='){
+                    helper = getchar();
+                    string_add(token, helper);
+                    if (helper == 'e'){
+                        helper = getchar();
+                        string_add(token, helper);
+                        if (helper == 'n'){
+                            helper = getchar();
+                            string_add(token, helper);
+                            if (helper == ('d')){
+                                state = START;
+                                break;
+                            }
+                        }
+                    }
+                }else
+                state = BLOCK;
             }
 
             case CL :
@@ -204,11 +301,10 @@ int getToken(token_t *token) {
                     return ERROR;
                 break;
 
-            case QUOTE: { // riešenie  pre - " -
+            case 17: { // riešenie  pre - " -
                 i = getchar();
-                if (i > 31 && i <
-                              128) { //opisuju tu N.Z. z automatu.. cele N.Z. je {32-127}-{34,92}, uz si nepamatuju co presne to znamena, tak jsem to dala jen takto prozatim, tak klidne to zmen jak je potreba
-                    state = QUOTE;
+                if (i > 31 && i < 128) { //opisuju tu N.Z. z automatu.. cele N.Z. je {32-127}-{34,92}, uz si nepamatuju co presne to znamena, tak jsem to dala jen takto prozatim, tak klidne to zmen jak je potreba
+                    state = 17;
                     string_add(token, i);
                 } else if (i == 92) {
                     state = Q1;
@@ -242,7 +338,7 @@ int getToken(token_t *token) {
                     state = RL; //retezcovy literal
                     string_add(token, i);
                 } else if (i > 31 && i < 128) { // stejne jako predtim neejsem si jista s N.Z. ktere tu je
-                    state = QUOTE; //retezcovy literal
+                    state =17; //retezcovy literal
                     string_add(token, i);
                 } else
                     return ERROR;
@@ -274,7 +370,7 @@ int getToken(token_t *token) {
                     state = Q1;
                     string_add(token, i);
                 } else if (i > 31 && i < 128) { // opet N.Z.
-                    state = QUOTE;
+                    state =17;
                     string_add(token, i);
                 } else
                     return ERROR;
@@ -290,7 +386,7 @@ int getToken(token_t *token) {
                     state = Q1;
                     string_add(token, i);
                 } else if (i > 31 && i < 128) { // opet N.Z.
-                    state = QUOTE;
+                    state = 17;
                     string_add(token, i);
                 } else
                     return ERROR;
@@ -325,12 +421,32 @@ int getToken(token_t *token) {
                 break;
             }
 
-            case EQUALS: {
+            case EQUALS: { //pokracovanie '=' ...mame uložene v tokene
                 i = getchar();
                 if (i == '=') {
-                    state = EE;
                     string_add(token, i);
+                    return EE;
                 } else
+                    if(i == 'b'){
+                        helper = getchar();
+                        string_add(token, helper);
+                        if (helper == 'e'){
+                            helper = getchar();
+                            string_add(token, helper);
+                            if (helper == 'g'){
+                                helper = getchar();
+                                string_add(token, helper);
+                                if (helper == ('i')){
+                                    helper = getchar();
+                                    string_add(token, helper);
+                                    if (helper == 'n'){
+                                        state = BLOCK;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
                     return ERROR;
                 break;
             }
