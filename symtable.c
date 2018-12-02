@@ -1,7 +1,3 @@
-    
-#include <stdlib.h>
-#include <stdio.h>
-
 #include "symtable.h"
 
 void symtable_init (NodePtr *RootPtr){

@@ -2,6 +2,8 @@
 #ifndef  _SYMTABLE_H
 #define  _SYMTABLE_H
 
+#include <stdlib.h>
+#include <stdio.h>
 #include <stdbool.h>
 
 typedef enum {
