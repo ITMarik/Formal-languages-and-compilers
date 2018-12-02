@@ -2,8 +2,6 @@
 
 void symtable_init (NodePtr *RootPtr){
 
-    if (RootPtr == NULL)
-        return;
     *RootPtr = NULL;
 }
 
