@@ -3,39 +3,41 @@
 
 #include "strings.h"
 
-#define STRING_LENGTH 8 //pocatecni alokace - na 8 bitu
+#define str_length 8 //pocatecni alokace - na 8 bitu
 #define S_OK 0
 #define S_WRONG 1
 
 
-void string_clear (strings *s)
-{
+void string_clear (strings *s) {
     s->length = 0;
     s->str[0] = '\0';
 }
 
-bool string_init (strings *s)
-{
-	if (!(s->str = (char *) malloc(STRING_LENGTH)))
+int string_init (strings *s) {
+	if (!(s->str = (char *) malloc(str_length)))
 	{
 		return S_WRONG;
 	}
 	string_clear (s);
-	s->size = STRING_LENGTH;
+	s->size = str_length;
 	return S_OK;
 }
 
-int string_add (strings *s, char c)
-{
-	unsigned int new;
+void string_free (strings *s) {
+	free (s->str);
+}
+
+int string_add (strings *s, char c) {
+
+	int helpling;
 	if (s->length + 1 >= s->size)
 	{
-		new = s->length + STRING_LENGTH;
-		if (!(s->str = (char *) realloc (s->str, new)))
+		helpling = s->length + str_length;
+		if (!(s->str = (char*)realloc(s->str, helpling)))
 		{
 			return S_WRONG;
 		}
-	s->size = new;
+	s->size = helpling;
 	}
 	s->str[s->length] = c;
 	S->length++;
@@ -43,46 +45,24 @@ int string_add (strings *s, char c)
 	return S_OK;	
 }
 
-int string_cmp (strings *strings, const char * const_string)
-{
-	return strcmp (strings->str, const_string);
+int string_compare (strings *retezec_1, strings *retezec_2) {
+
+	return strcmp (retezec1->str, retezec2);
 }
 
-bool string_cp (strings *ted, strings *pot)
-{
-	unsigned int new = ted->length;
-	if (new >= pot->size)
+int string_copy (strings *retezec_1, strings *retezec_2) { //zkopiruju retezec 1 do retezce 2
+	
+	int helpling = retezec_1->length;
+	if (helpling >= retezec_2->size)
 	{
-		if (!(pot->str = (char *) realloc (pot->str, new +1)))
+		if (!(retezec_2->str = (char *) realloc (retezec_2->str, helpling +1)))
 		{
-			return false;
+			return S_WRONG;
 		}
-		pot->size = new + 1;
+		retezec_2->size = helpling + 1;
 	}
-	strcpy(pot->str,ted->str);
-	pot->length = new;
-	return true;
+	strcpy(retezec_2->str,retezec_1->str);
+	retezec_2->length = helpling;
+	return S_OK;
 }
 
-void string_free (strings *s)
-{
-	free (s->str);
-}
-
-bool string_add_const (strings *s, const char *const_string)
-{
-	unsigned int const_STRING_LENGTH = (unsigned int) strlength(const_string);
-	if (s->length + const_STRING_LENGTH +1 >= s->size)
-	{
-		unsigned int new = s->length +const_STRING_LENGTH +1;
-		if (!(s->str = (char *) realloc(s->str, new)))
-		{
-			return false;
-		}
-		s->size = new;
-	}
-	s->length += const_STRING_LENGTH;
-	strcat (s->str, const_string);
-	s->str[s->length] = '\0';
-	return
-}

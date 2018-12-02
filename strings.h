@@ -2,20 +2,20 @@
 #define strings_h
 
 #include <stdbool.h>
+#include <stdio.h>
 
 typedef struct 
 {
-	char *str;
-	unsigned int length;
-	unsigned int size;
+	char *str;	//place for string
+	int length; //real legth of string
+	int size; //size of alocated memory
 } strings;
 
 void string_clear (strings *s);
-bool string_init (strings *s);
-bool string_add (strings *s, char c);
-int string_cmp (strings *strings, const char * const_string);
-bool string_cp (strings *ted, strings *pot);
+int string_init (strings *s);
 void string_free (strings *s);
-bool string_add_const (strings *s, const char *const_string);
+int string_add (strings *s, char c);
+int string_compare (strings *retezec_1, strings *retezec_2);
+int string_copy (strings *retezec_1, strings *retezec_2);
 
 #endif //_strings_H
