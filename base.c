@@ -19,18 +19,20 @@ int BinaryToDecimal(long long n)
 }
 
 
-int DecimalToOctal(int decimalNumber)
+long long convertOctalToDecimal(int octalNumber)
 {
-    int octal_num = 0, i = 1;	
+    int decimalNumber = 0, i = 0;
 
-    while (decimalNumber != 0)
+    while(octalNumber != 0)
     {
-        octal_num += (decimalNumber % 8) * i;
-        decimalNumber /= 8;
-        i *= 10;
+        decimalNumber += (octalNumber%10) * pow(8,i);
+        ++i;
+        octalNumber/=10;
     }
 
-    return octal_num;
+    i = 1;
+
+    return decimalNumber;
 }
 
 
@@ -47,25 +49,17 @@ int hexadecimalToDecimal(char hexVal[])
     // Extracting characters as digits from last character 
     for (int i=len-1; i>=0; i--) 
     {    
-        // if character lies in '0'-'9', converting  
-        // it to integral 0-9 by subtracting 48 from 
-        // ASCII value. 
         if (hexVal[i]>='0' && hexVal[i]<='9') 
         { 
             dec_val += (hexVal[i] - 48)*base; 
-                  
-            // incrementing base by power 
+                   
             base = base * 16; 
         } 
   
-        // if character lies in 'A'-'F' , converting  
-        // it to integral 10 - 15 by subtracting 55  
-        // from ASCII value 
         else if (hexVal[i]>='A' && hexVal[i]<='F') 
         { 
             dec_val += (hexVal[i] - 55)*base; 
           
-            // incrementing base by power 
             base = base*16; 
         } 
     } 
