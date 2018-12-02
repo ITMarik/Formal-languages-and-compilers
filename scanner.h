@@ -46,7 +46,15 @@ typedef enum {
     LE,
     EXE,
     E_OF,
-    EE
+    EE,
+    DEF,
+    DO,
+    ELSE,
+    END,
+    IF,
+    NIL,
+    THEN,
+    WHILE
 } automat_type;
 //vsechny stavy automatu, snad :D
 
@@ -61,6 +69,10 @@ typedef struct
     double decimal;
 }token_t;
 
+int string_init(token_t *xx);
+void string_free(token_t *xx);
+void string_clean(token_t *xx);
+int string_add (token_t *xx, char c);
 int get_token(token_t* loaded_token);
 
 #endif
