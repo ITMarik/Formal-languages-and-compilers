@@ -3,8 +3,6 @@
 #include <string.h>
 #include <math.h>
 
-#include "base.h"
-
 int BinaryToDecimal(long long n)
 {
     int decimalNumber = 0, i = 0, zbytek;
@@ -19,40 +17,35 @@ int BinaryToDecimal(long long n)
 }
 
 
-long long convertOctalToDecimal(int octalNumber)
+int DecimalToOctal(int decimalNumber)
 {
-    int decimalNumber = 0, i = 0;
+    int octal_num = 0, i = 1;	
 
-    while(octalNumber != 0)
+    while (decimalNumber != 0)
     {
-        decimalNumber += (octalNumber%10) * pow(8,i);
-        ++i;
-        octalNumber/=10;
+        octal_num += (decimalNumber % 8) * i;
+        decimalNumber /= 8;
+        i *= 10;
     }
 
-    i = 1;
-
-    return decimalNumber;
+    return octal_num;
 }
 
 
-// Function to convert hexadecimal to decimal 
 int hexadecimalToDecimal(char hexVal[]) 
 {    
     int len = strlen(hexVal); 
       
-    // Initializing base value to 1, i.e 16^0 
     int base = 1; 
       
     int dec_val = 0; 
       
-    // Extracting characters as digits from last character 
     for (int i=len-1; i>=0; i--) 
     {    
+
         if (hexVal[i]>='0' && hexVal[i]<='9') 
         { 
             dec_val += (hexVal[i] - 48)*base; 
-                   
             base = base * 16; 
         } 
   
@@ -66,8 +59,6 @@ int hexadecimalToDecimal(char hexVal[])
       
     return dec_val; 
 } 
-
-
 
 int main(int argc, char const *argv[])
 {
