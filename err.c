@@ -1,10 +1,10 @@
 #include <stdio.h>
 
 
-void vypis_chybu(int error) {
+void vypis_hodnotu(int navratova_hodnota) {
 
-	switch(error) {
-		case 0: fprintf(stderr,"Vše proběhlo v pořádku\n"); break;
+	switch(navratova_hodnota) {
+		case 0: fprintf(stderr,"Překlad proběhl bez chyb.\n"); break;
 		case 1: fprintf(stderr,"Chyba v programu v rámci lexikální analýzy.\n"); break;
 		case 2: fprintf(stderr,"Chyba v programu v rámci syntaktické analýzy.\n"); break;
 		case 3: fprintf(stderr,"Sémantická chyba v programu.\n"); break;
