@@ -1,3 +1,4 @@
+
 #ifndef  _SYMTABLE_H
 #define  _SYMTABLE_H
 
@@ -36,4 +37,4 @@ bool symtable_Delete (tBSTNodePtr *,char K);
 
 void symtable_Free (tBSTNodePtr *);
 
-#endif //_BSTSYMTABLE_H
+#endif //_SYMTABLE_H

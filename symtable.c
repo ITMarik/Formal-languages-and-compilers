@@ -61,9 +61,9 @@ void ReplaceByRightmost (tBSTNodePtr PtrReplaced, tBSTNodePtr *RootPtr){
         {
             PtrReplaced->Key = (*RootPtr)->Key;
             PtrReplaced->data = (*RootPtr)->data;
-            tBSTNodePtr hojo = *RootPtr;
+            tBSTNodePtr helpling = *RootPtr;
             *RootPtr = (*RootPtr)->LPtr;
-            free(hojo);
+            free(helpling);
         }
     }
 }
@@ -78,14 +78,14 @@ bool symtable_Delete (tBSTNodePtr *RootPtr, char K){
             BST_symtable_Delete(&(*RootPtr)->LPtr, K);
         }
         else{
-            tBSTNodePtr hojo = *RootPtr;
-            if(hojo->LPtr == NULL){
-                *RootPtr = hojo->RPtr;
-                free(hojo);
+            tBSTNodePtr helpling = *RootPtr;
+            if(helpling->LPtr == NULL){
+                *RootPtr = helpling->RPtr;
+                free(helpling);
             }
-            else if(hojo->RPtr == NULL){
-                *RootPtr = hojo->LPtr;
-                free(hojo);
+            else if(helpling->RPtr == NULL){
+                *RootPtr = helpling->LPtr;
+                free(helpling);
             }
             else{
                 ReplaceByRightmost (*RootPtr, (&(*RootPtr)->LPtr));
