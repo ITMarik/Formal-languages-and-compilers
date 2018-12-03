@@ -6,30 +6,32 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
+
+//2.14
 typedef enum {
-    START,
-    ID,
-    CL,
-    LBRACKET,
-    RBRACKET,
-    PLUS,
-    MINUS,
-    COMMA,
-    DOT,
-    LESS,
-    GREATER,
-    TIMES,
-    EQUALS,
-    DIV,
-    SEMICOLON,
-    HASH,
-    BLOCK,
-    NECO,
-    QUOTE,
+    START,          // 0, počiatok
+    ID,             // identifikator
+    CL,             // čiselný literál
+    LBRACKET,       //  (
+    RBRACKET,       //  )
+    PLUS,           //  +
+    MINUS,          //  -
+    COMMA,          //  ,
+    DOT,            //  .
+    LESS,           //  <
+    GREATER,        //  >
+    TIMES,          //  *
+    EQUALS,         //  =
+    DIV,            //  /
+    SEMICOLON,      //  ;
+    HASH,           //  #
+    BLOCK,          // =begin
+    NECO,           //  \
+    X,              //  "
     EOL,
-    EXCL,
-    QUERY,
-    ONE,
+    EXCL,           //  !
+    QUERY,          //  ?
+    ONE,            // rezervné
     ERROR,
     Q1,
     Q2,
@@ -46,8 +48,10 @@ typedef enum {
     LE,
     EXE,
     E_OF,
-    EE,
-    DEF,
+    EE,             //  = =
+    GREATER2,       //  >
+    LESS2,          //  <
+    DEF,            // KLUCOVE SLOVA :
     DO,
     ELSE,
     END,
@@ -73,6 +77,9 @@ int string_init(token_t *xx);
 void string_free(token_t *xx);
 void string_clean(token_t *xx);
 int string_add (token_t *xx, char c);
+//int BinaryToDecimal(long long n);
+//long long convertOctalToDecimal(int octalNumber);
+//int hexadecimalToDecimal(char hexVal[]);
 int get_token(token_t* loaded_token);
 
 #endif
