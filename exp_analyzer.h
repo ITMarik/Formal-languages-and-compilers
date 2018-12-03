@@ -1,38 +1,42 @@
-
 #define table_size 14
 
 
 typedef enum ITEM_TYPE
 {
-	X_PLUS,
-	X_HANDLE_PLUS,
-	X_MINUS,
-	X_HANDLE_MINUS,
-	X_MULTIPLICATION,
-	S_HANDLE_MULTIPLICATION,
-	X_DIVISION,
-	X_HANDLE_DIVISION,
-	X_LESS,
-	X_HANDLE_LESS,
-	X_GREATER,
-	X_HANDLE_GREATER,
-	X_LESS_EQUAL,
-	X_HANDLE_LESSEQUAL,
-	X_GREATER_EQUAL,
-	X_HANDLE_GREATER_EQUAL,
-	X_EQUAL,
-	X_HANDLE_EQUAL,
-	X_NOT_EQUAL,
-	X_HANDLE_NOT_EQUAL,
-	X_L_BRACKET,
-	X_HANDLE_L_BRACKET,
-	X_R_BRACKET,
-	X_I,
-	X_HANDLE_I,
-	X_DOLLAR,
+	X_PLUS,			// 0
+	X_MINUS,		// 1
+	X_MULTIPLICATION,	// 2
+	X_DIVISION,		// 3
+	X_LESS,			// 4
+	X_GREATER,		// 5
+	X_LESS_EQUAL,		// 6	
+	X_GREATER_EQUAL,	// 7
+	X_EQUAL,		// 8 
+	X_NOT_EQUAL,		// 9
+	X_L_BRACKET,		// 10
+	X_R_BRACKET,		// 11
+	X_I,			// 12
+	X_DOLLAR,		// 13
 
-	X_NONTERMINAL,
-	X_STOP
+	X_NONTERMINAL,		// 14
+	X_STOP,			// 15
+	
+	X_HANDLE_PLUS,
+	X_HANDLE_MINUS,
+	X_HANDLE_MULTIPLICATION,
+	X_HANDLE_DIVISION,
+	X_HANDLE_LESS,
+	X_HANDLE_GREATER,
+	X_HANDLE_LESS_EQUAL,
+	X_HANDLE_GREATER_EQUAL,
+	X_HANDLE_EQUAL,
+	X_HANDLE_NOT_EQUAL,
+	X_HANDLE_L_BRACKET,
+	NOTHING,
+	X_HANDLE_I,
+	X_HANDLE_DOLLAR
+	
+
 
 } ITEM_TYPE;
 
@@ -68,46 +72,156 @@ typedef struct precedence_item
 
 
 
-ITEM_TYPE handle[3]; //3 maximalni delka handle
+ITEM_TYPE handle[5]; //5 maximalni delka handle
 //v poli bude handle reverzne
 
 
-void from_stack_to_handle(ITEM_TYPE * handle, t_precedence_item *stack)
+
+bool start_handle(ITEM_TYPE type)
+{
+ 	return (type == X_HANDLE_PLUS || type==X_HANDLE_MINUS || type==X_HANDLE_MULTIPLICATION ||
+		type==X_HANDLE_DIVISION || type==X_HANDLE_LESS || type==X_HANDLE_GREATER ||
+		type==X_HANDLE_LESS_EQUAL || type==X_HANDLE_GREATER_EQUAL || type==X_HANDLE_EQUAL ||
+		type==X_HANDLE_NOT_EQUAL || type==X_HANDLE_L_BRACKET || type==X_HANDLE_I ||
+		type==X_HANDLE_DOLLAR);
+}
+
+
+
+void from_stack_to_handle(ITEM_TYPE * pole, t_precedence_item *stack)
 //nemeni stack
 {
 	printf("from_stack_to_handle\n");
 	t_precedence_item *p_item = stack;
 	int i = 0;
-	while(i<=2)
+/*
+printf("co je ve stacku\n");
+while (p_item != NULL)
+{
+	printf("%d\n",p_item->type);
+	p_item = p_item->next;
+}
+*/
+
+	while(i<=4)
 	{
-		*handle = p_item->type;
-		if(handle[i] == X_HANDLE_PLUS || handle[i]==X_HANDLE_MINUS || handle[i]==S_HANDLE_MULTIPLICATION ||
-		handle[i]==X_HANDLE_DIVISION || handle[i]==X_HANDLE_LESS || handle[i]==X_HANDLE_GREATER ||
-		handle[i]==X_HANDLE_LESSEQUAL || handle[i]==X_HANDLE_GREATER_EQUAL || handle[i]==X_HANDLE_EQUAL ||
-		handle[i]==X_HANDLE_NOT_EQUAL || handle[i]==X_HANDLE_L_BRACKET || handle[i]==X_HANDLE_I )
+		printf("start while\n");
+		*pole = p_item->type;
+		printf("ve stacku:%d v poli:%d icko je:%d pointer je:%p\n ",p_item->type, handle[i], i,pole);
+		if( start_handle(handle[i]) )
 		{
-			handle++;
-			*handle=X_STOP;
+			printf("from stack to handle while if\n");
+			pole++;
+			*pole=X_STOP;
+			printf("from stack to handle while end if\n");
 			break;
 		}
 		p_item=p_item->next;
-	i++;
-	handle++;
+		i++;
+		pole++;
+		printf("from stack to handle end  while\n");
 	}
 }
 
 
-bool rule(ITEM_TYPE handle[3], t_precedence_item * stack, int *rule_id )
+bool rule(ITEM_TYPE handle[5], t_precedence_item * stack, int *rule_id )
 {
 	printf("rule\n");
-	if(handle[0]==X_HANDLE_I && handle[1]==X_STOP)
+	printf("handle [0]=%d  [1]=%d  [2]=%d  [3]=%d  [4]=%d \n",handle[0],handle[1],handle[2],handle[3],handle[4]);
+	if(handle[0]==X_I && start_handle(handle[1]) && handle[2]==X_STOP)
 	{
 	//pravidlo 1: E -> i
 		*rule_id = 1;
 		return true;
 	}
+	if(handle[0]==X_R_BRACKET && handle[1]==X_NONTERMINAL && handle[2]==X_L_BRACKET && start_handle(handle[3]) && handle[4]==X_STOP)
+	{
+	//pravidlo 2: E -> (E)
+		*rule_id = 2;
+		return true;
+	}
+	if(handle[0]==X_NONTERMINAL && handle[2]==X_NONTERMINAL && start_handle(handle[3]) && handle[4]==X_STOP)
+	{
+		if(handle[1]== X_PLUS)
+		{
+			//pravidlo 3: E -> E+E
+			*rule_id = 3;
+			return true;
+		}
+		if(handle[1]== X_MINUS)
+		{
+			//pravidlo 4: E -> E-E
+			*rule_id = 4;
+			return true;
+		}
+		if(handle[1]== X_MULTIPLICATION)
+		{
+			//pravidlo 5: E -> E*E
+			*rule_id = 5;
+			return true;
+		}
+		if(handle[1]== X_DIVISION)
+		{
+			//pravidlo 6: E -> E/E
+			*rule_id = 6;
+			return true;
+		}
+		if(handle[1]== X_LESS)
+		{
+			//pravidlo 7: E -> E<E
+			*rule_id = 7;
+			return true;
+		}
+		if(handle[1]== X_GREATER)
+		{
+			//pravidlo 8: E -> E>E
+			*rule_id = 8;
+			return true;
+		}
+		if(handle[1]== X_LESS_EQUAL)
+		{
+			//pravidlo 9: E -> E<=E
+			*rule_id = 9;
+			return true;
+		}
+		if(handle[1]== X_GREATER_EQUAL)
+		{
+			//pravidlo 10: E -> E>=E
+			*rule_id = 10;
+			return true;
+		}
+		if(handle[1]== X_EQUAL)
+		{
+			//pravidlo 11: E -> E==E
+			*rule_id = 11;
+			return true;
+		}
+		if(handle[1]== X_NOT_EQUAL)
+		{
+			//pravidlo 12: E -> E!=E
+			*rule_id = 12;
+			return true;
+		}
+	}
+	return false;
 }
 
+
+void remove_handle(t_precedence_item ** top)
+{
+	t_precedence_item * p_item;
+	t_precedence_item * p_help;
+	p_item = *top;
+	
+	while( ! start_handle(p_item->type))
+	{
+		p_help = p_item;
+		p_item = p_item->next;
+		free(p_help);
+	}
+	p_item->type = (p_item->type - 16); // oddelani zacatek handle na normalni terminal
+	*top = p_item;
+}
 
 
 ITEM_TYPE type_of_token(t_token *token)
@@ -191,6 +305,7 @@ void push(ITEM_TYPE type, t_precedence_item **top)
 //funkce prida na vrchol zasobniku novy prvek s typem type
 //pokud je pronter na stack NULL prida novy prvek
 {
+	printf("push:%d\n",type);
 	t_precedence_item * p_precedence_item;
 	p_precedence_item = malloc(sizeof(t_precedence_item));
 	if(*top == NULL)
@@ -204,7 +319,6 @@ void push(ITEM_TYPE type, t_precedence_item **top)
 		*top = p_precedence_item;
 		(*top)->type = type;
 	}
-	printf("konec push\n");	
 }
 
 
@@ -234,13 +348,20 @@ void top_to_handle(t_precedence_item * stack )
 
 	while (p_precedence_item->type == X_NONTERMINAL)
 	{
-printf("while top\n");
+printf("while toptohandle\n");
 		p_precedence_item = p_precedence_item->next;
 	}
-printf("konec top\n");
-	p_precedence_item-> type = (p_precedence_item->type +1);
+printf("konec toptohandle\n");
+	p_precedence_item-> type = (p_precedence_item->type +16);
 }
 
 
-
+void print_stack(t_precedence_item* pointer)
+{
+	while (pointer != NULL)
+	{
+		printf("stack:%d\n", pointer->type);
+		pointer = pointer->next;
+	}
+}
 
