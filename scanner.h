@@ -2,14 +2,16 @@
 
 #ifndef scanner_h
 #define scanner_h
+#include "syntax_analyzer.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
 
-//2.14
+//0.18
 typedef enum {
     START,          // 0, počiatok
+    ERROR,
     ID,             // identifikator
     CL,             // čiselný literál
     LBRACKET,       //  (
@@ -27,12 +29,11 @@ typedef enum {
     HASH,           //  #
     BLOCK,          // =begin
     NECO,           //  \
-    X,              //  "
-    EOL,
+    XXX,              //  "
+    EO_L,
     EXCL,           //  !
     QUERY,          //  ?
     ONE,            // rezervné
-    ERROR,
     Q1,
     Q2,
     Q3,
@@ -51,6 +52,7 @@ typedef enum {
     EE,             //  = =
     GREATER2,       //  >
     LESS2,          //  <
+    DL3,
     DEF,            // KLUCOVE SLOVA :
     DO,
     ELSE,
@@ -67,10 +69,12 @@ char *keywords[] = {"def", "do", "else", "end", "if", "nil", "then", "while" };
 typedef struct
 {
     char *string_value;
-    automat_type type;
+   // automat_type type;
+    TOKEN_TYPE type;
     int size_alloc;
     int integer; // pre dlzku
-    double decimal;
+   // double decimal;
+    float f_value;
 }token_t;
 
 int string_init(token_t *xx);
