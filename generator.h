@@ -67,5 +67,6 @@ typedef enum {
 	DPRINT			//  <symb>
 } assembler_calling;
 
+//int (assembler_calling some_shit, char *sym1, char *sym2, char *sym3)
 
 #endif
