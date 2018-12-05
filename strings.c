@@ -1,11 +1,11 @@
 /************************************************************************
- * Předmět:        IFJ / IAL                                            *
- * Soubor :        strings.c - rozšíření práce s řetězci		*
- * Datum :         5.12. 2018                                           *
- * Projekt :       Implementace překladače imperativního jazyka IFJ 18  *
+* Předmět:        IFJ / IAL                                             *
+* Soubor :        strings.c - rozšíření práce s řetězci			*
+* Datum :         5.12. 2018                                            *
+* Projekt :       Implementace překladače imperativního jazyka IFJ 18   *
 * Autoři :        Martin Janda (xjanda27)                               *
 * Varianta :      Tým 123, varianta I                                   *
- ***********************************************************************/	
+************************************************************************/	
 
 #include <stdlib.h>
 #include <string.h>
