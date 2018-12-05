@@ -9,7 +9,7 @@
 
 #define string_length 10
 #define OK 0
-//21.51
+//21.17
 
 /*************************************************************************************************
 ************************************_POMOCNE_FUNKCIE_*********************************************
@@ -139,6 +139,7 @@ int getToken(token_t *token) {
     int helper = 1; //pomocna pri '=begin' r. 336  / '=end
     int helper_exp = 0;
     int a = 1;
+    int f = 0;
     float c = 1;
     float d = (float) -1.0;
     float b = 0.0;
@@ -156,11 +157,11 @@ int getToken(token_t *token) {
             case START:
                 if (i == '\n') {
                     token->type = T_EOL;
-                    return EO_L;
+                    return OK;
                 }
                 if (i == EOF ){
                     token->type = T_EOF;
-                    return E_OF;
+                    return OK;
                 }
                 if (isspace(i)) {
                     state = START;
@@ -182,17 +183,17 @@ int getToken(token_t *token) {
                 } else if (i == '(') {
                     string_add(token, i);
                     token->type = T_L_BRACKET;
-                    return LBRACKET;
+                    return OK;
                 } else if (i == ')') {
                     string_add(token, ')');
                     token->type = T_R_BRACKET;
-                    return RBRACKET;
+                    return OK;
                 } else if (i == '+') {
                     string_add(token, i);
                     i = getchar();
                     if (i == ' ' || i == '\n' || i == EOF){
                         token->type = T_PLUS;
-                        return PLUS;
+                        return OK;
                     }else{
                         return ERROR;
                     }
@@ -201,14 +202,14 @@ int getToken(token_t *token) {
                     i = getchar();
                     if (i == ' ' || i == '\n' || i == EOF){
                         token->type = T_MINUS;
-                        return MINUS;
+                        return OK;
                     }else{
                         return ERROR;
                     }
                 } else if (i == ',') {
                     string_add(token, ',');
                     token->type = T_COMMA;
-                    return COMMA;
+                    return OK;
                 } else if (i == '<') {
                     string_add(token, i);
                     state = LESS;
@@ -220,7 +221,7 @@ int getToken(token_t *token) {
                     i = getchar();
                     if (i == ' ' || i == '\n' || i == EOF){
                     token->type = T_MULTIPLICATION;
-                    return TIMES;
+                    return OK;
                     }else{
                         return ERROR;
                     }
@@ -229,7 +230,7 @@ int getToken(token_t *token) {
                     i = getchar();
                     if (i == ' ' || i == '\n' || i == EOF){
                         token->type = T_DIVISION;
-                        return DIV;
+                        return OK;
                     }else{
                         return ERROR;
                     }
@@ -244,7 +245,7 @@ int getToken(token_t *token) {
                 } else if (i == '\n') {
                     string_add(token, i);
                     token->type = T_EOL;
-                    return EO_L;
+                    return OK;
                 } else if (i == '!') {
                     string_add(token, i);
                     state = EXCL;
@@ -261,7 +262,7 @@ int getToken(token_t *token) {
                     string_add(token, i);
 
                 }else {
-                    return START;
+                    return OK;
                     printf("Tu je komentár, ktorý nemame vracat ..zasa !\n");
                 }
                 break;
@@ -271,14 +272,14 @@ int getToken(token_t *token) {
                 if (i == ' ' || i == '\n' || i == EOF){
                     string_add(token, '=');
                     token->type = T_ASSIGNMENT;
-                    return ASSIGNMENT;
+                    return OK;
                 }else if (i == '=') {
                     string_add(token, i);
                     string_add(token, i);
                     i = getchar();
                     if (i == ' ' || i == '\n' || i == EOF) {
                         token->type = T_EQUAL;
-                        return EE;
+                        return OK;
                     }else{
                         return ERROR;
                     }
@@ -362,7 +363,7 @@ int getToken(token_t *token) {
                     printf("Takto ? too byt nemaaa !!! \n");
                     token->type = T_INT;
                     token->f_value = help;
-                    return ONE;
+                    return OK;
                 } else {
                     ungetc(i, stdin);
                 }
@@ -376,28 +377,28 @@ int getToken(token_t *token) {
 
                             if (compare(token, "do") == 0) {// klucove slova
                                 token->type = T_DO;
-                                return DO;
+                                return OK;
                             } else if (compare(token, "if") == 0) {
                                 token->type = T_IF;
-                                return IF;
+                                return OK;
                             } else if (compare(token, "def") == 0) {
                                 token->type = T_DEF;
-                                return DEF;
+                                return OK;
                             } else if (compare(token, "end") == 0) {
                                 token->type = T_END;
-                                return END;
+                                return OK;
                             } else if (compare(token, "nil") == 0) {
                                 token->type = T_NIL;
-                                return NIL;
+                                return OK;
                             } else if (compare(token, "else") == 0) {
                                 token->type = T_ELSE;
-                                return ELSE;
+                                return OK;
                             } else if (compare(token, "then") == 0) {
                                 token->type = T_THEN;
-                                return THEN;
+                                return OK;
                             } else if (compare(token, "while") == 0) {
                                 token->type = T_WHILE;
-                                return WHILE;
+                                return OK;
                             }
                        // }else{
                          //   state = COMMA;
@@ -415,7 +416,7 @@ int getToken(token_t *token) {
                         string_add(token,i);
                     printf("DOSTALI SME SA NA KONIEC ID !!!!..........♥\n");
                     token->type = T_ID;
-                    return ID;
+                    return OK;
                 }
                 break;
 
@@ -441,7 +442,7 @@ int getToken(token_t *token) {
                         token->f_value = b;
                         //printf("KONIEC AUTOMAT DOUBLE !! \n");
                         //printf("\n");
-                        return DOUBLE;
+                        return OK;
                     }
                 }else{
                     string_add(token,i);
@@ -485,9 +486,10 @@ int getToken(token_t *token) {
                 if (!(i == ' ' || i == '\n' || i == EOF)) {
                     if(i == '+' || i == '-'){
                         string_add(token,i);
+                        f = i;
                         i = getchar();
                         if(helper_exp == 0){
-                            if ( i == 45){
+                            if ( f == 45){
                                 c = c * d;
                                 printf("---BOLO TAM MINUS MENIME TO !------%f \n",c);
                             }
@@ -527,7 +529,7 @@ int getToken(token_t *token) {
                     token->type = T_FLOAT;
                     token->f_value = help_exp;
                     printf("EXPONENT HOTOVO!! \n");
-                    return DL2;
+                    return OK;
                     break;
 
             //*tento stav je ako jediny pomenovany cislom, pretoze nam na nom z nejakeho
@@ -543,7 +545,7 @@ int getToken(token_t *token) {
                 } else if (i == '"') {
                     string_add(token, i);
                     token->type = T_STRING;
-                    return RL;
+                    return OK;
                 } else
                     return ERROR;
                 break;
@@ -567,7 +569,7 @@ int getToken(token_t *token) {
                 } else if (i == '"') {
                     string_add(token, i);
                     token->type = T_STRING;
-                    return RL; //retezcovy literal
+                    return OK; //retezcovy literal
                 } else if (i > 31 && i < 128 && i != 34 && i != 92) { // stejne jako predtim neejsem si jista s N.Z. ktere tu je
                     state = 18; //retezcovy literal
                     string_add(token, i);
@@ -592,7 +594,7 @@ int getToken(token_t *token) {
                 } else if (i == '"') {
                     string_add(token, i);
                     token->type = T_STRING;
-                    return RL;
+                    return OK;
                     string_add(token, i);
                 } else if (i == 92) {
                     state = Q1;
@@ -609,7 +611,7 @@ int getToken(token_t *token) {
                 if (i == '"') {
                     string_add(token, i);
                     token->type = T_STRING;
-                    return RL;
+                    return OK;
                 } else if (i == 92 ) {
                     state = Q1;
                     string_add(token, i);
@@ -624,14 +626,14 @@ int getToken(token_t *token) {
             case GREATER: { // pokracovanie >
                 if (i == ' ' || i == '\n' || i == EOF){
                     token->type = T_GREATER;
-                    return GREATER2;
+                    return OK;
                 }else if (i == '=') {
                     string_add(token, i);
                     i = getchar();
                     if (i == ' ' || i == '\n' || i == EOF) {
                         string_add(token, i);
                         token->type = T_GREATER_EQUAL;
-                        return GREATER;
+                        return OK;
                     } else{
                         return ERROR;
                     }
@@ -643,14 +645,14 @@ int getToken(token_t *token) {
             case LESS: { // pokracovanie <
                 if (i == ' ' || i == '\n' || i == EOF){
                     token->type = T_LESS;
-                    return LESS2;
+                    return OK;
                 }else if (i == '=') {
                     string_add(token, i);
                     i = getchar();
                     if (i == ' ' || i == '\n' || i == EOF) {
                         string_add(token, i);
                         token->type = T_LESS_EQUAL;
-                        return LESS;
+                        return OK;
                     } else{
                         return ERROR;
                     }
@@ -665,7 +667,7 @@ int getToken(token_t *token) {
                     i = getchar();
                     if (i == ' ' || i == '\n' || i == EOF) {
                         token->type = T_NOT_EQUAL;
-                        return EXE;
+                        return OK;
                     } else {
                         return ERROR;
                     }
@@ -680,7 +682,7 @@ int getToken(token_t *token) {
     }
     printf("............JE TO KONIEC SUBORU ! .............\n\n");
     token->type = T_EOF;
-    return E_OF;
+    return OK;
  } // end of get_token ...38
 
 
