@@ -1,22 +1,25 @@
-CFLAGS = -std=c99 -Wall -Wextra -pedantic -g
-OFILES = syntax_analyzer.o strings.o symtable.o stack.o scanner.o
-HFILES = syntax_analyzer.h strings.h symtable.h stack.h scanner.h
-CC = gcc
+CFLAGS=-std=c99 -Wall -pedantic -g
 
-syntax_analyzer.o: syntax_analyzer.c $(HFILES)
-	$(CC) $(CFLAGS) -c syntax_analyzer.c
-	
-strings.o: strings.c $(HFILES)
-	$(CC) $(CFLAGS) -c strings.c
-	
-symtable.o: symtable.c $(HFILES)
-	$(CC) $(CFLAGS) -c symtable.c
-	
-stack.o: stack.c $(HFILES)
-	$(CC) $(CFLAGS) -c stack.c
-	
-scanner.o: scanner.c $(HFILES)
-	$(CC) $(CFLAGS) -c scanner.c
+prekladac: scanner.o symtable.o syntax_analyzer.o main.o exp_analyzer.o strings.o 
+	gcc $(CFLAGS) scanner.o symtable.o syntax_analyzer.o main.o exp_analyzer.o strings.o -lm -o prekladac
 
+scanner.o: scanner.c
+	gcc $(CFLAGS) -c scanner.c
+
+symtable.o: symtable.c
+	gcc $(CFLAGS) -c symtable.c
+
+syntax_analyzer.o: syntax_analyzer.c
+	gcc $(CFLAGS) -c syntax_analyzer.c
+
+exp_analyzer.o: exp_analyzer.c
+	gcc $(CFLAGS) -c exp_analyzer.c
+	
+main.o: main.c
+	gcc $(CFLAGS) -c main.c
+	
+strings.o: strings.c
+	gcc $(CFLAGS) -c strings.c
+	
 clean:
-	rm $(OFILES)
+	rm -f *.o
