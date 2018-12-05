@@ -65,8 +65,9 @@ typedef enum {
 	//debug instructions
 	BREAK,
 	DPRINT			//  <symb>
+
 } assembler_calling;
 
-//int (assembler_calling some_shit, char *sym1, char *sym2, char *sym3)
+int create_something(assembler_calling magic, char *sym1, char *sym2, char *sym3);  // calling of instructions by their symbol numbers
 
 #endif
