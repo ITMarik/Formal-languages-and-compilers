@@ -10,7 +10,7 @@
 #include <ctype.h>
 #include <math.h>
 
-//13.05
+//18.41
 typedef enum { // -13
     START,          // 0, počiatok
     ERROR,
