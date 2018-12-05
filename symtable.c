@@ -1,3 +1,16 @@
+/************************************************************************
+ * Předmět:        IFJ / IAL                                            *
+ * Soubor :        symtable.c - implementace tabulky symbolů            *
+ * Datum :         5.12. 2018                                           *
+ * Projekt :       Implementace překladače imperativního jazyka IFJ 18  *
+ * Členové týmu :  Martin Janda                                         *
+ *              :  Marek Šťastný                                        *
+ *              :  Martina Tučková                                      *
+ *              :  Martina Jendrálová                                   *
+ * Varianta :      Tým 123, varianta I                                  *
+ ***********************************************************************/
+
+
 #include "symtable.h"
 
 void symtable_init (NodePtr *RootPtr){

@@ -1,3 +1,15 @@
+/************************************************************************
+ * Předmět:        IFJ / IAL                                            *
+ * Soubor :        generator.c - vlastní generování, 3 adresný kód      *
+ * Datum :         5.12. 2018                                           *
+ * Projekt :       Implementace překladače imperativního jazyka IFJ 18  *
+ * Členové týmu :  Martin Janda                                         *
+ *              :  Marek Šťastný                                        *
+ *              :  Martina Tučková                                      *
+ *              :  Martina Jendrálová                                   *
+ * Varianta :      Tým 123, varianta I                                  *
+ ***********************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "generator.h"
@@ -148,6 +160,6 @@ int create_something (assembler_calling magic, char *sym1, char *sym2, char *sym
           fprintf(generator_result, "%s %s %s %s\n", "JUMPIFNEQ", sym1, sym2, sym3); break;
       }
     }  
-    
+
     return vypis_hodnotu(0);  
 } 
