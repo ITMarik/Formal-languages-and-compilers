@@ -9,7 +9,7 @@
 
 #define string_length 10
 #define OK 0
-//21.21
+//21.26
 
 /*************************************************************************************************
 ************************************_POMOCNE_FUNKCIE_*********************************************
@@ -161,7 +161,7 @@ int getToken(token_t *token) {
                 }
                 if (i == EOF ){
                     token->type = T_EOF;
-                    return T_EOF;
+                    return OK;
                 }
                 if (isspace(i)) {
                     state = START;
@@ -705,7 +705,7 @@ int main (int argc, char ** argv){
 
 
         printf("number: %d  \t----length: %d\t----buffer: %s \t----type: %d\t----f_value: %f   \n", need, next_token.size_alloc, next_token.string_value, next_token.type,next_token.f_value);
-    } while (need != T_EOF ); //EOF
+    } while (next_token.type != T_EOF ); //EOF
 
     string_free(&next_token);
 
