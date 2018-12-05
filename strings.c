@@ -1,3 +1,15 @@
+/************************************************************************
+ * Předmět:        IFJ / IAL                                            *
+ * Soubor :        strings.c - rozšíření práce s řetězci		        *
+ * Datum :         5.12. 2018                                           *
+ * Projekt :       Implementace překladače imperativního jazyka IFJ 18  *
+ * Členové týmu :  Martin Janda                                         *
+ *              :  Marek Šťastný                                        *
+ *              :  Martina Tučková                                      *
+ *              :  Martina Jendrálová                                   *
+ * Varianta :      Tým 123, varianta I                                  *
+ ***********************************************************************/	
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -37,7 +49,7 @@ int string_add (strings *s, char c) {
 		{
 			return S_WRONG;
 		}
-	s->size = helpling;
+		s->size = helpling;
 	}
 	s->str[s->length] = c;
 	S->length++;
