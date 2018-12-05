@@ -1,6 +1,9 @@
 #include "syntax_analyzer.h"
+#include "exp_analyzer.c"
 
 
+
+/*
 bool expression(int *ToKeN_OrDeR, t_token *P_token)
 //funkce zpracovavajici vyrazy
 //P_token je ukazatel na prvni token vyrazu
@@ -18,7 +21,7 @@ bool expression(int *ToKeN_OrDeR, t_token *P_token)
 		return false;		//
 	}
 }
-
+*/
 
 
 
@@ -158,7 +161,7 @@ bool assignment(int *ToKeN_OrDeR, t_token *P_token)
 		printf("assignment pravidlo 14: true\n");
 		return true;
 	}
-	else if(P_token->type == T_EQUAL)
+	else if(P_token->type == T_ASSIGNMENT)
 	//simulace pravidla 15
 	{
 		next_token(ToKeN_OrDeR, P_token);
