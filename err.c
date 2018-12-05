@@ -3,7 +3,7 @@
  * Soubor :        err.c - funkce pro vypis erroru           		*
  * Datum :         5.12. 2018                                           *
  * Projekt :       Implementace překladače imperativního jazyka IFJ 18  *
- * Členové týmu :  Martin Janda                                         *                                 *
+ * Autoři :  	   Martin Janda                                         *                                 
  * Varianta :      Tým 123, varianta I                                  *
  ***********************************************************************/
 
