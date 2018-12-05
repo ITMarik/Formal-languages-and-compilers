@@ -1,3 +1,13 @@
+/************************************************************************
+ * Předmět:        IFJ / IAL                                            *
+ * Soubor :        scanner.c                                            *
+ * Datum :         5.12. 2018                                           *
+ * Projekt :       Implementace překladače imperativního jazyka IFJ 18  *
+ * Autori :        Martina Tučková       (xtucko00)                     *
+ *                 Martina Jendrálová    (xjendr03)                     *
+ * Varianta :      Tým 123, varianta I                                  *
+ ***********************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,7 +19,7 @@
 
 #define string_length 10
 #define OK 0
-//21.26
+//23.01
 
 /*************************************************************************************************
 ************************************_POMOCNE_FUNKCIE_*********************************************
@@ -360,7 +370,6 @@ int getToken(token_t *token) {
                     helper++;
                     state = CL;
                 } else if(!(i > 47 && i < 58)) {
-                    printf("Takto ? too byt nemaaa !!! \n");
                     token->type = T_INT;
                     token->f_value = help;
                     return OK;
@@ -423,15 +432,12 @@ int getToken(token_t *token) {
 
             case DOUBLE: {
                 if (!(i == 'e' || i == 'E')) {
-                    if (!(is_it_end(i))) {
+                    if (!(i == ' ' || i == '\n' || i == EOF)) {
                         if (isdigit(i)) {//desetinny literal
-                            printf("ASCII hodnota i : %d.........\n", i);
                             string_add(token, i); //strtof()
                             i = i - 48;
-                            printf("Skutocna hodnota i : %d.............\n", i);
                             b = b + (i / (pow(10, a)));
                             a++;
-                            printf(".....HELP DOUBLE JE :%f.........\n", help);
                             printf("\n");
                             state = DOUBLE;
                         } else
@@ -440,47 +446,52 @@ int getToken(token_t *token) {
                         b = help + b;
                         token->type = T_FLOAT;
                         token->f_value = b;
-                        //printf("KONIEC AUTOMAT DOUBLE !! \n");
-                        //printf("\n");
                         return OK;
                     }
                 }else{
                     string_add(token,i);
+                    b = help + b;
                     state = DL;
                 }
                 break;
             }
             case DL:{
-                if (!(is_it_end(i))) {
+                if (!(i == ' ' || i == '\n' || i == EOF)) {
+                    if( i == '+' || i == '-'){
+                        string_add(token, i);
+                        f = i;
+                        i = getchar();
+                        if(helper_exp == 0){
+                            if(f == 45){
+                                c = c * d;
+                            }
+                        } else {
+                            return ERROR;
+                        }
+                    }
                     if (isdigit(i)) {//desetinny literal 0.58e14 napr.
-                        //printf("ASCII hodnota exponentu i : %d.........\n", i);
                         string_add(token, i);
                         i = i - 48;
                         help_exp = i + (help_exp * (pow(10, helper_exp)));
                         helper_exp++;
-                        //printf("Skutocna hodnota exponentu i : %d.............\n", i);
-                        //printf("EXPONENT : %f.........\n", help_exp);
-                        //printf("\n");
                         state = DL;
-                    } else
+                    } else{
                         return ERROR;
+                    }
                 } else {
-                    state = DL3;
-                    break;
-                }
+                    if (helper_exp == 0) {
+                        return ERROR;
+                    }else{
+                        help_exp = help_exp * c ;
+                        b = pow(b, help_exp);
+                        printf("\n");
+                        token->type = T_FLOAT;
+                        token->f_value = b;
+                        return OK;
+                        break;
+                    }
+                }break;
             }
-// z nejakeho dôvodu to vyskakuje sem von skor ako  ma !!!!!!!!!!!!!!
-            case DL3:{
-                //printf(" %f  na   %f ....je : \n",help, help_exp);
-                b = pow(b, help_exp);
-                //printf("Vysledok : %f...........\n", help);
-                //printf("\n");
-                token->type = T_FLOAT;
-                token->f_value = b;
-                //printf("EXPONENT HOTOVO!! \n");
-                break;
-            }
-
 
             case EXP:
                 if (!(i == ' ' || i == '\n' || i == EOF)) {
@@ -491,23 +502,17 @@ int getToken(token_t *token) {
                         if(helper_exp == 0){
                             if ( f == 45){
                                 c = c * d;
-                                printf("---BOLO TAM MINUS MENIME TO !------%f \n",c);
                             }
                         } else{
                             return ERROR;
                         }
-
                     }
                     if (isdigit(i)) {
                         //setinny literal 0.58e14 napr.
-                            printf("ASCII hodnota exponentu i : %d.........\n", i);
                             string_add(token, i);
                             i = i - 48;
                             help_exp = i + (help_exp * (pow(10, helper_exp)));
                             helper_exp++;
-                            printf("Skutocna hodnota exponentu i : %d.............\n", i);
-                            printf("EXPONENT : %f.........\n", help_exp);
-                            printf("\n");
                             state = EXP;
                         } else
                             return ERROR;
@@ -522,13 +527,9 @@ int getToken(token_t *token) {
                 } break;
 
             case DL2:
-                printf(" %f  na   %f ....je : \n",help, help_exp);
                 help_exp = pow(help, help_exp);
-                    printf("Vysledok : %f...........\n", help);
-                    printf("\n");
                     token->type = T_FLOAT;
                     token->f_value = help_exp;
-                    printf("EXPONENT HOTOVO!! \n");
                     return OK;
                     break;
 
