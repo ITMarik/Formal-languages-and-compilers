@@ -230,7 +230,7 @@ int getToken(token_t *token) {
                     state = HASH;
                 }else {
                     state = START;
-                    printf("Tu je komentár, ktorý nemame vracat ..zasa !\n");
+                    //printf("Tu je komentár, ktorý nemame vracat ..zasa !\n");
                 }
                 break;
             } //corect
@@ -265,7 +265,7 @@ int getToken(token_t *token) {
                     }
                 }
                 else {
-                    printf("SPATNEEE!!!!");
+                    //printf("SPATNEEE!!!!");
                     return ERROR;
                 }
                 break;
@@ -286,7 +286,7 @@ int getToken(token_t *token) {
                                 helper = getchar();
                                 //string_add(token, helper);
                                 if (helper == ('d')) {
-                                    printf("Tu je komentár, ktorý nemame vracať\n");
+                                    //printf("Tu je komentár, ktorý nemame vracať\n");
                                     state = HASH;
                                 }
                             }
@@ -324,7 +324,7 @@ int getToken(token_t *token) {
                 //printf("Sme v ID !!... %d \n",i);
                 string_add(token, i);
                 if (is_it_end(i)) { //??????????
-                    printf("Bolo to IDentifikator\n");
+                    //printf("Bolo to IDentifikator\n");
                     token->type = T_ID;
                     return ID;
                     break;
@@ -337,10 +337,10 @@ int getToken(token_t *token) {
                         string_add(token, i);
                         i = getchar();
                         if ((is_it_end(i))){
-                            printf("OKKK !!!\n");
+                            //printf("OKKK !!!\n");
                             return ID;
                         }else{
-                            printf("SPAAAATNE !!!!\n");
+                            //printf("SPAAAATNE !!!!\n");
                             return ERROR;
                         }
                     }
@@ -381,22 +381,22 @@ int getToken(token_t *token) {
                 if (!(i == 'e' || i == 'E')) {
                     if (!(is_it_end(i))) {
                         if (isdigit(i)) {//desetinny literal
-                            printf("ASCII hodnota i : %d.........\n", i);
+                            //printf("ASCII hodnota i : %d.........\n", i);
                             string_add(token, i); //strtof()
                             i = i - 48;
-                            printf("Skutocna hodnota i : %d.............\n", i);
+                            //printf("Skutocna hodnota i : %d.............\n", i);
                             help = help + (i / (pow(10, helper)));
                             helper++;
-                            printf(".....HELP DOUBLE JE :%f.........\n", help);
-                            printf("\n");
+                            //printf(".....HELP DOUBLE JE :%f.........\n", help);
+                            //printf("\n");
                             state = DOUBLE;
                         } else
                             return ERROR;
                     } else {
                         token->type = T_FLOAT;
                         token->f_value = help;
-                        printf("KONIEC AUTOMAT DOUBLE !! \n");
-                        printf("\n");
+                        //printf("KONIEC AUTOMAT DOUBLE !! \n");
+                        //printf("\n");
                         return DOUBLE;
                     }
                 }else{
@@ -408,14 +408,14 @@ int getToken(token_t *token) {
             case DL:{
                 if (!(is_it_end(i))) {
                     if (isdigit(i)) {//desetinny literal 0.58e14 napr.
-                        printf("ASCII hodnota exponentu i : %d.........\n", i);
+                        //printf("ASCII hodnota exponentu i : %d.........\n", i);
                         string_add(token, i);
                         i = i - 48;
                         help_exp = i + (help_exp * (pow(10, helper_exp)));
                         helper_exp++;
-                        printf("Skutocna hodnota exponentu i : %d.............\n", i);
-                        printf("EXPONENT : %f.........\n", help_exp);
-                        printf("\n");
+                        //printf("Skutocna hodnota exponentu i : %d.............\n", i);
+                        //printf("EXPONENT : %f.........\n", help_exp);
+                        //printf("\n");
                         state = DL;
                     } else
                         return ERROR;
@@ -426,13 +426,13 @@ int getToken(token_t *token) {
             }
 // z nejakeho dôvodu to vyskakuje sem von skor ako  ma !!!!!!!!!!!!!!
             case DL3:{
-                printf(" %f  na   %f ....je : \n",help, help_exp);
+                //printf(" %f  na   %f ....je : \n",help, help_exp);
                 help = pow(help, help_exp);
-                printf("Vysledok : %f...........\n", help);
-                printf("\n");
+                //printf("Vysledok : %f...........\n", help);
+                //printf("\n");
                 token->type = T_FLOAT;
                 token->f_value = help;
-                printf("EXPONENT HOTOVO!! \n");
+                //printf("EXPONENT HOTOVO!! \n");
                 break;
             }
 
@@ -595,7 +595,7 @@ int getToken(token_t *token) {
 
 // vnútro mainu treba zakomentovať !!!!!!!!!!!!!!!!!!!!
 int main (int argc, char ** argv){
-    int need;
+  /*  int need;
 
     token_t next_token;
     string_init(&next_token);
@@ -611,5 +611,5 @@ int main (int argc, char ** argv){
 
     string_free(&next_token);
 
-    return 0;
+    return 0;   */
 }
