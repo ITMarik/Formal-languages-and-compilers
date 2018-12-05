@@ -19,7 +19,7 @@
 
 #define string_length 10
 #define OK 0
-//23.01
+//23.13
 
 /*************************************************************************************************
 ************************************_POMOCNE_FUNKCIE_*********************************************
@@ -260,7 +260,7 @@ int getToken(token_t *token) {
                     string_add(token, i);
                     state = EXCL;
                 } else {
-                    printf("VSTUP TYMTO ZACIATOCNYM ZNAKOM NIE JE POVOLENY !!!!\n");
+                    //printf("VSTUP TYMTO ZACIATOCNYM ZNAKOM NIE JE POVOLENY !!!!\n");
                     return ERROR;
                 }
                 break;
@@ -273,7 +273,7 @@ int getToken(token_t *token) {
 
                 }else {
                     return OK;
-                    printf("Tu je komentár, ktorý nemame vracat ..zasa !\n");
+                    //printf("Tu je komentár, ktorý nemame vracat ..zasa !\n");
                 }
                 break;
             } //corect
@@ -309,7 +309,7 @@ int getToken(token_t *token) {
                                 if (helper == 'n'){
                                     if (token->type == T_FIRST ){
                                         state = BLOCK;
-                                        printf("IDEME DO BLOCKU !!! \n");
+                                        //printf("IDEME DO BLOCKU !!! \n");
                                     }
                                 }
                             }
@@ -317,7 +317,7 @@ int getToken(token_t *token) {
                     }
                 }
                 else {
-                    printf("SPATNEEE!!!!");
+                    //printf("SPATNEEE!!!!");
                     return ERROR;
                 }
                 break;
@@ -338,10 +338,10 @@ int getToken(token_t *token) {
                                 helper = getchar();
                                 string_add(token, helper);
                                 if (helper == ('d')) {
-                                    printf("Tu je komentár, ktorý nemame vracať\n");
+                                    //printf("Tu je komentár, ktorý nemame vracať\n");
                                     helper = getchar();
                                     if (helper != EOF){
-                                        printf("IDEME DO HASHU !!!! ♥\n");
+                                        //("IDEME DO HASHU !!!! ♥\n");
                                         state = HASH;
                                     }
                                 }
@@ -349,7 +349,7 @@ int getToken(token_t *token) {
                         }
                     }
                 }else {
-                    printf("        TU SME SPATNEEE ..TU NEMAME BYT BLOCK !!!x\n");
+                    //printf("        TU SME SPATNEEE ..TU NEMAME BYT BLOCK !!!x\n");
                     state = BLOCK;
                     break;
                 }
@@ -416,14 +416,14 @@ int getToken(token_t *token) {
                     } else {//
                         return ERROR;
 
-                        printf("PADLI SME NA ERRORE NA ID !!!!..........♠ \n");
+                        //printf("PADLI SME NA ERRORE NA ID !!!!..........♠ \n");
                         return ERROR;
                     }
                     state = ID;
                 } else {
                     if(i == '!' || i == '?')
                         string_add(token,i);
-                    printf("DOSTALI SME SA NA KONIEC ID !!!!..........♥\n");
+                    //printf("DOSTALI SME SA NA KONIEC ID !!!!..........♥\n");
                     token->type = T_ID;
                     return OK;
                 }
@@ -438,7 +438,7 @@ int getToken(token_t *token) {
                             i = i - 48;
                             b = b + (i / (pow(10, a)));
                             a++;
-                            printf("\n");
+                            //printf("\n");
                             state = DOUBLE;
                         } else
                             return ERROR;
@@ -484,7 +484,7 @@ int getToken(token_t *token) {
                     }else{
                         help_exp = help_exp * c ;
                         b = pow(b, help_exp);
-                        printf("\n");
+                        //printf("\n");
                         token->type = T_FLOAT;
                         token->f_value = b;
                         return OK;
@@ -681,12 +681,12 @@ int getToken(token_t *token) {
                 break;
         }
     }
-    printf("............JE TO KONIEC SUBORU ! .............\n\n");
+    //printf("............JE TO KONIEC SUBORU ! .............\n\n");
     token->type = T_EOF;
     return OK;
  } // end of get_token ...38
 
-
+/*
 // vnútro mainu treba zakomentovať !!!!!!!!!!!!!!!!!!!!
 int main (int argc, char ** argv){
     int need;
@@ -695,8 +695,8 @@ int main (int argc, char ** argv){
     string_init(&next_token);
     next_token.type = T_FIRST;
     do {
-        printf("\n \n");
-        printf("PREBERAME DALSI TOKEN !!!!! \n");
+        //printf("\n \n");
+        //printf("PREBERAME DALSI TOKEN !!!!! \n");
         need = getToken(&next_token);
         if (need == 1){
             printf("\n\n");
@@ -712,3 +712,4 @@ int main (int argc, char ** argv){
 
     return 0;
 }
+*/
