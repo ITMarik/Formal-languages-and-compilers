@@ -9,7 +9,7 @@
 
 #define string_length 10
 #define OK 0
-//18.41
+//0.18
 
 /*************************************************************************************************
 ************************************_POMOCNE_FUNKCIE_*********************************************
@@ -134,8 +134,14 @@ int getToken(token_t *token) {
 
     automat_type state = START;
     int i = 0; //načítanie tokenu
+
+    // matematicke premenne
     int helper = 1; //pomocna pri '=begin' r. 336  / '=end
     int helper_exp = 0;
+    int a = 1;
+    float c = 1;
+    float d = (float) -1.0;
+    float b = 0.0;
     float help_exp = 0.0;
     float help = 0.0;
     string_clean(token);
@@ -344,6 +350,7 @@ int getToken(token_t *token) {
                     string_add(token, i);
                     state = DOUBLE;
                 } else if (i == 'e' || i == 'E') {
+                    string_add(token, i);
                     state = EXP;
                 }else if (i > 47 && i < 58){
                     string_add(token, i);
@@ -417,20 +424,21 @@ int getToken(token_t *token) {
                 if (!(i == 'e' || i == 'E')) {
                     if (!(is_it_end(i))) {
                         if (isdigit(i)) {//desetinny literal
-                            //printf("ASCII hodnota i : %d.........\n", i);
+                            printf("ASCII hodnota i : %d.........\n", i);
                             string_add(token, i); //strtof()
                             i = i - 48;
-                            //printf("Skutocna hodnota i : %d.............\n", i);
-                            help = help + (i / (pow(10, helper)));
-                            helper++;
-                            //printf(".....HELP DOUBLE JE :%f.........\n", help);
-                            //printf("\n");
+                            printf("Skutocna hodnota i : %d.............\n", i);
+                            b = b + (i / (pow(10, a)));
+                            a++;
+                            printf(".....HELP DOUBLE JE :%f.........\n", help);
+                            printf("\n");
                             state = DOUBLE;
                         } else
                             return ERROR;
                     } else {
+                        b = help + b;
                         token->type = T_FLOAT;
-                        token->f_value = help;
+                        token->f_value = b;
                         //printf("KONIEC AUTOMAT DOUBLE !! \n");
                         //printf("\n");
                         return DOUBLE;
@@ -463,31 +471,64 @@ int getToken(token_t *token) {
 // z nejakeho dôvodu to vyskakuje sem von skor ako  ma !!!!!!!!!!!!!!
             case DL3:{
                 //printf(" %f  na   %f ....je : \n",help, help_exp);
-                help = pow(help, help_exp);
+                b = pow(b, help_exp);
                 //printf("Vysledok : %f...........\n", help);
                 //printf("\n");
                 token->type = T_FLOAT;
-                token->f_value = help;
+                token->f_value = b;
                 //printf("EXPONENT HOTOVO!! \n");
                 break;
             }
 
 
             case EXP:
-                if (isdigit(i) || i == '+' || i == '-') {
-                    state = DL2;
-                    string_add(token, i);
-                } else
-                    return ERROR;
-                break;
+                if (!(i == ' ' || i == '\n' || i == EOF)) {
+                    if(i == '+' || i == '-'){
+                        string_add(token,i);
+                        i = getchar();
+                        if(helper_exp == 0){
+                            if ( i == 45){
+                                c = c * d;
+                                printf("---BOLO TAM MINUS MENIME TO !------%f \n",c);
+                            }
+                        } else{
+                            return ERROR;
+                        }
+
+                    }
+                    if (isdigit(i)) {
+                        //setinny literal 0.58e14 napr.
+                            printf("ASCII hodnota exponentu i : %d.........\n", i);
+                            string_add(token, i);
+                            i = i - 48;
+                            help_exp = i + (help_exp * (pow(10, helper_exp)));
+                            helper_exp++;
+                            printf("Skutocna hodnota exponentu i : %d.............\n", i);
+                            printf("EXPONENT : %f.........\n", help_exp);
+                            printf("\n");
+                            state = EXP;
+                        } else
+                            return ERROR;
+                    } else {
+                        if (helper_exp == 0){
+                            return ERROR;
+                        }else{
+                            help_exp = help_exp * c;
+                            state = DL2;
+                            break;
+                        }
+                } break;
 
             case DL2:
-                if (isdigit(i)) {
-                    state = DL2;
-                    string_add(token, i);
-                } else
-                    return ERROR;
-                break;
+                printf(" %f  na   %f ....je : \n",help, help_exp);
+                help_exp = pow(help, help_exp);
+                    printf("Vysledok : %f...........\n", help);
+                    printf("\n");
+                    token->type = T_FLOAT;
+                    token->f_value = help_exp;
+                    printf("EXPONENT HOTOVO!! \n");
+                    return DL2;
+                    break;
 
             //*tento stav je ako jediny pomenovany cislom, pretoze nam na nom z nejakeho
             // neznameho dovodu nechcel fungovat povodny nazov QUOTE, ktory bol typu automat_type, dakuujem za pochopenie
