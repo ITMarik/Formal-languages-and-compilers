@@ -4,12 +4,14 @@
 #define scanner_h
 #include "syntax_analyzer.h"
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <ctype.h>
+#include <math.h>
 
-//0.18
-typedef enum {
+//13.05
+typedef enum { // -13
     START,          // 0, počiatok
     ERROR,
     ID,             // identifikator
@@ -23,9 +25,9 @@ typedef enum {
     LESS,           //  <
     GREATER,        //  >
     TIMES,          //  *
-    EQUALS,         //  =
+    EQUALS,         //  ==
     DIV,            //  /
-    SEMICOLON,      //  ;
+    ASSIGNMENT,      //  =
     HASH,           //  #
     BLOCK,          // =begin
     NECO,           //  \
