@@ -19,7 +19,7 @@
 
 #define string_length 10
 #define OK 0
-//23.13
+//23.47
 
 /*************************************************************************************************
 ************************************_POMOCNE_FUNKCIE_*********************************************
@@ -175,7 +175,7 @@ int getToken(token_t *token) {
                 }
                 if (isspace(i)) {
                     state = START;
-                } else if (i > 96 && i <123 || i == '_') { // IDentifikator ...je to male pismeno ? alebo '_'
+                } else if ((i > 96 && i <123 )|| i == '_') { // IDentifikator ...je to male pismeno ? alebo '_'
                     string_add(token, i);
                     state = ID;
                 } else if (i == '0') {
@@ -380,7 +380,7 @@ int getToken(token_t *token) {
 
             case ID: //az na EOF is correct
                 if (!(i == ' ' || i == '\n' || i == EOF || i == '!' || i == '?')) { //ak to NIE je medzera, \n alebo koniec suboru a zaroven to NIE je ani ?,!
-                    if (i == 95 || i == 44 || i > 47 && i < 58 || isalpha(i)) { // ak je to _ alebo 0 .. 9 uloži a ide dalej
+                    if (i == 95 || i == 44 || (i > 47 && i < 58) || isalpha(i)) { // ak je to _ alebo 0 .. 9 uloži a ide dalej
                         //if (i != 44) {
                             string_add(token, i);
 
