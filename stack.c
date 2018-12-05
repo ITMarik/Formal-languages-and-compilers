@@ -1,3 +1,12 @@
+/************************************************************************
+ * Předmět:        IFJ / IAL                                            *
+ * Soubor :        generator.c - vlastní generování, 3 adresný kód      *
+ * Datum :         5.12. 2018                                           *
+ * Projekt :       Implementace překladače imperativního jazyka IFJ 18  *
+ * Autoři :        Martin Janda                                         *                                  *
+ * Varianta :      Tým 123, varianta I                                  *
+ ***********************************************************************/
+
 #include "stack.h"
 
 void stack_t_init(stack_t* stack)
