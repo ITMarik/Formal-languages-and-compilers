@@ -12,6 +12,7 @@
 
 
 #include "symtable.h"
+#include "err.h"
 
 void symtable_init (NodePtr *RootPtr){
 
@@ -23,7 +24,7 @@ void symtable_Insert (NodePtr *RootPtr,char K, TData Content){
     if (*RootPtr == NULL) {
     	*RootPtr = malloc(sizeof(struct TNode));
 		if (RootPtr == NULL)
-            return;
+            vypis_hodnotu(99);
         (*RootPtr)->LPtr = NULL;
         (*RootPtr)->RPtr = NULL;
         (*RootPtr)->Key = K;
@@ -38,20 +39,15 @@ void symtable_Insert (NodePtr *RootPtr,char K, TData Content){
 }
 
 
-TData *symtable_Search (NodePtr *RootPtr, char K){
-    if(RootPtr != NULL){
-        if((*RootPtr)->Key == K){
-            return &(*RootPtr)->data;
-        }
-        else{
-            if((*RootPtr)->Key > K)
-                return symtable_Search(&((*RootPtr)->LPtr), K);
-            else
-                return symtable_Search(&((*RootPtr)->RPtr), K);
-        }
-    }
-    else{
-        return NULL;
+TNode symtable_Search(NodePtr *RootPtr, char *Key) {
+
+    if (RootPtr != NULL) {
+        if (!strcmp(RootPtr->Key, Key))
+            return RootPtr;
+        else if (strcmp(RootPtr->Key,Key) > 0)
+            return symtable_Search(RootPtr->LPtr, Key);
+        else
+            return symtable_Search(RootPtr->RPtr, Key);
     }
 }
 
