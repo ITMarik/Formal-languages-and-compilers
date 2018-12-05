@@ -2,15 +2,10 @@
 
 #ifndef scanner_h
 #define scanner_h
-#include "syntax_analyzer.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include <math.h>
+//#include "syntax_analyzer.h"
 
-//18.41
+//13.05
 typedef enum { // -13
     START,          // 0, počiatok
     ERROR,
@@ -30,7 +25,7 @@ typedef enum { // -13
     ASSIGNMENT,      //  =
     HASH,           //  #
     BLOCK,          // =begin
-    NECO,           //  \
+    NECO,           //  
     XXX,              //  "
     EO_L,
     EXCL,           //  !

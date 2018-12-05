@@ -1,31 +1,25 @@
-#include "syntax_analyzer.h"
+/************************************************************************
+ * Předmět:        IFJ / IAL                                            *
+ * Soubor :        syntax_analyzer.c 				        *
+ * Datum :         5.12. 2018                                           *
+ * Projekt :       Implementace překladače imperativního jazyka IFJ 18  *
+ * Autoři       :  Martin Janda                                         *
+ *              :  Marek Šťastný                                        *
+ *              :  Martina Tučková                                      *
+ *              :  Martina Jendrálová                                   *
+ * Varianta :      Tým 123, varianta I                                  *
+ ***********************************************************************/
+
+//#include "syntax_analyzer.h"
+//#include "exp_analyzer.h"
+
+#include "structs.h"
+#include "scanner.c"
 #include "exp_analyzer.c"
 
 
 
-/*
-bool expression(int *ToKeN_OrDeR, t_token *P_token)
-//funkce zpracovavajici vyrazy
-//P_token je ukazatel na prvni token vyrazu
-//po dokonceni bude v P_token prvni token ktery nasleduje za exp
-{
-	if(P_token->type == T_INT)	//
-	{
-		next_token(ToKeN_OrDeR, P_token);
-		printf("funkce expression: true\n");
-		return true;		//
-	}
-	else				//demoverze pozdeji smazat
-	{	
-		printf("funkce expression: false\n");
-		return false;		//
-	}
-}
-*/
-
-
-
-bool id_is_operand(t_token *token)	// demoverze
+bool id_is_operand()	// demoverze
 {
 	return false;
 }
@@ -34,11 +28,11 @@ bool id_is_operand(t_token *token)	// demoverze
 
 
 
-bool is_exp( t_token *P_token  )
+bool is_exp( token_t *P_token  )
 {
 	if( P_token->type == T_L_BRACKET || P_token->type == T_STRING || P_token->type == T_INT || P_token->type == T_FLOAT )
 	{
-		printf("funkce is_exp: true1\n");
+//		printf("funkce is_exp: true1\n");
 		return true;
 	}
 	
@@ -46,11 +40,11 @@ bool is_exp( t_token *P_token  )
 	{
 		if( id_is_operand(P_token) ) // funkce zjisti na zaklade nalezeni polozky v symtable
 		{
-			printf("funkce is_exp: true\n");
+///			printf("funkce is_exp: true\n");
 			return true;
 		}
 	}
-	printf("funkce is_exp: false\n");
+//	printf("funkce is_exp: false\n");
 	return false;
 }
 
@@ -58,162 +52,186 @@ bool is_exp( t_token *P_token  )
 
 
 
-bool term(int *ToKeN_OrDeR, t_token *P_token)
+int term(token_t *P_token)
 {
-	printf("funkce term\n");
+//	printf("funkce term\n");
 	if(P_token->type == T_ID)
 	//simulace pravidla 25
 	{
-		next_token(ToKeN_OrDeR, P_token);
-		printf("funkce term pravidlo 25: true\n");
-		return true;
+		
+//		printf("funkce term pravidlo 25: true\n");
+		return getToken( P_token) ;
 	}
 	else if(P_token->type == T_INT)
 	//simulace pravidla 26
 	{
-		next_token(ToKeN_OrDeR, P_token);
-		printf("funkce term pravidlo 26: true\n");
-		return true;
+		
+//		printf("funkce term pravidlo 26: true\n");
+		return getToken( P_token);
 	}
 	else if(P_token->type == T_FLOAT)
 	//simulace pravidla 27
 	{
-		next_token(ToKeN_OrDeR, P_token);
-		printf("funkce term pravidlo 27: true\n");
-		return true;
+//		printf("funkce term pravidlo 27: true\n");
+		return getToken( P_token);
 	}
 	else if(P_token->type == T_STRING)
 	//simulace pravidla 28
 	{
-		next_token(ToKeN_OrDeR, P_token);
-		printf("funkce term pravidlo 29: true\n");
-		return true;
+//		printf("funkce term pravidlo 29: true\n");
+		return getToken( P_token);
 	}
 	else if(P_token->type == T_NIL)
 	//simulace pravidla 29
 	{
-		next_token(ToKeN_OrDeR, P_token);
-		printf("funkce term pravidlo 29: true\n");
-		return true;
+
+//		printf("funkce term pravidlo 29: true\n");
+		return  getToken( P_token);
 	}
-	return false;
+	return SYNT_ERROR;
 }
 
 
 
 
 
-bool term_part(int *ToKeN_OrDeR, t_token * P_token)
+int term_part(token_t * P_token)
 {
-	printf("funkce term_part\n");
+	int result;
+//	printf("funkce term_part\n");
 	if(P_token->type == T_COMMA)
 	//simulace pravidla 23
 	{
-		next_token(ToKeN_OrDeR, P_token);
-		if( term(ToKeN_OrDeR, P_token) )
-		{
-			return term_part(ToKeN_OrDeR, P_token);
+		if(getToken( P_token) == LEX_ERROR)
+		{		
+			return LEX_ERROR;
 		}
+		result = term( P_token);	
+		if( result == SUCCES )
+		{
+			return term_part( P_token);
+		}
+		else
+			return result;
 	}
 	else if( P_token->type == T_EOL || P_token->type == T_R_BRACKET)
 	//simulace pravidla 24
 	{
-		printf("funkce term_part pravidlo 24: true\n");
-		return true;
+//		printf("funkce term_part pravidlo 24: true\n");
+		return SUCCES;
 	}
-	return false;
+	return SYNT_ERROR;
 }
 
 
 
 
 
-bool term_list(int *ToKeN_OrDeR, t_token *P_token)
+int term_list(token_t *P_token)
 {
-	printf("funkce term_list\n");
+	int result;
+//	printf("funkce term_list\n");
 	if( P_token->type == T_ID || P_token->type == T_INT || P_token->type == T_FLOAT || P_token->type == T_STRING || P_token->type == T_NIL )
 	//simulace pravidla 22
 	{
-		if( term(ToKeN_OrDeR, P_token) )
+		result = term( P_token);
+		if( result == SUCCES )
 		{
-			return term_part(ToKeN_OrDeR, P_token);
+			return term_part( P_token);
 		}
+		else
+		{
+			return result;
+		}	
 	}
 	else if( P_token->type == T_EOL || P_token->type == T_R_BRACKET )
 	{
 	//simulace pravidla 21
-		printf("term_list pravidlo 21: true\n");
-		return true;
+//		printf("term_list pravidlo 21: true\n");
+		return SUCCES;
 	}
-	return false;
+	return SYNT_ERROR;
 }
 
 
 
 
 
-bool assignment(int *ToKeN_OrDeR, t_token *P_token)
+int assignment(token_t *P_token)
 {
-	printf("funkce assignment\n");
+//	printf("funkce assignment\n");
 	if(P_token->type == T_EOL)
 	//simulace pravidla 14
 	{
-		printf("assignment pravidlo 14: true\n");
-		return true;
+//		printf("assignment pravidlo 14: true\n");
+		return SUCCES;
 	}
 	else if(P_token->type == T_ASSIGNMENT)
 	//simulace pravidla 15
 	{
-		next_token(ToKeN_OrDeR, P_token);
-		return assigned(ToKeN_OrDeR, P_token);
+		if( getToken( P_token) == LEX_ERROR)
+			return LEX_ERROR;
+		{
+		return assigned( P_token);
+		}
 	}
-	return false;
+	return SYNT_ERROR;
 }
 		
 
 
 
 
-bool assigned(int * ToKeN_OrDeR, t_token *P_token)
+int assigned(token_t *P_token)
 {
-printf("funkce assigned\n");
+int result;
+//	printf("funkce assigned\n");
 	if( is_exp(P_token) )
 	//simulace pravidla 16
 	{
-		printf("assigned prvni vetev\n");
-		return expression(ToKeN_OrDeR, P_token);
+//		printf("assigned prvni vetev\n");
+		result = expression( P_token);
+		return result;	
 	}
 	else if(P_token->type == T_ID)
 	//simulace pravidla 17
 	{
-		return f_call(ToKeN_OrDeR, P_token);
+		result = f_call( P_token);
+		return result;
 	}
+	return SYNT_ERROR;
 }
 
 
 
 
 
-bool part(int *ToKeN_OrDeR, t_token *P_token)
+int part(token_t *P_token)
 {
-	printf("funkce part\n");
+//	printf("funkce part\n");
 	if(P_token->type == T_COMMA)
 	//simulace pravidla 8
 	{
-		next_token(ToKeN_OrDeR, P_token);
+		if (getToken( P_token) == LEX_ERROR)
+		{
+			return LEX_ERROR;
+		}
 		if(P_token->type == T_ID)
 		{
-			next_token(ToKeN_OrDeR, P_token);
-			return part(ToKeN_OrDeR, P_token);
+			if (getToken( P_token) == LEX_ERROR)
+			{
+				return LEX_ERROR;
+			}			
+			return part( P_token);
 		}
 	}
 	else if(P_token->type == T_R_BRACKET)
 	//simulace pravidla 9
 	{
-		return true;
+		return SUCCES;
 	}
-	printf("funkce part: false\n");
-	return false;
+//	printf("funkce part: false\n");
+	return SYNT_ERROR;
 }
 
 
@@ -221,109 +239,127 @@ bool part(int *ToKeN_OrDeR, t_token *P_token)
 
 
 
-bool param_list(int *ToKeN_OrDeR, t_token * P_token)
+int param_list(token_t * P_token)
 {
-	printf("funkce param_list\n");
+//	printf("funkce param_list\n");
 	if(P_token->type == T_ID)
 	//simulace pravidla 7
 	{
-		next_token(ToKeN_OrDeR, P_token);
-		return part(ToKeN_OrDeR, P_token);
+		if(getToken( P_token)== LEX_ERROR)
+		{	
+			return LEX_ERROR;
+		}
+		return part( P_token);
 	}
 	else if(P_token->type == T_R_BRACKET)
 	//simulace pravidla 6
 	{
-		printf("funkce param_list: true\n");
-		return true;
+//		printf("funkce param_list: true\n");
+		return SUCCES;
 	}
-	printf("funkce param_list: false\n");
-	return false;
+//	printf("funkce param_list: false\n");
+	return SYNT_ERROR;
 }
 
 
 
 
 
-bool param_group(int *ToKeN_OrDeR, t_token * P_token)
+int param_group(token_t * P_token)
 {
-	printf("funkce param_group\n");
+//	printf("funkce param_group\n");
 	if(P_token->type == T_ID || P_token->type ==  T_EOL || P_token->type ==  T_INT || P_token->type ==  T_FLOAT 
 	|| P_token->type ==  T_STRING || P_token->type ==  T_NIL )
 	//simulace pravidla 19
 	{
-		return term_list(ToKeN_OrDeR, P_token);
+		return term_list( P_token);
 	}
 	else if(P_token->type == T_L_BRACKET)
 	//simulace pravidla 20
 	{
-		next_token(ToKeN_OrDeR, P_token);
-		if( term_list(ToKeN_OrDeR, P_token) )
+		if( getToken( P_token) == LEX_ERROR)
+		{
+			return LEX_ERROR;
+		}
+		if( term_list( P_token)==SUCCES )
 		{
 			if(P_token->type == T_R_BRACKET)
 			{
-				next_token(ToKeN_OrDeR, P_token);
-				printf("funkce param_group: true\n");
-				return true;
+				if(getToken( P_token)== LEX_ERROR)
+				{	
+					return LEX_ERROR;
+				}
+//				printf("funkce param_group: true\n");
+				return SUCCES;
 			}
 		}
 	}	
-	printf("funkce param_group: false\n");
-	return false;
+//	printf("funkce param_group: false\n");
+	return SYNT_ERROR;
 }
 
 
 
 
 
-bool f_call(int *ToKeN_OrDeR, t_token * P_token)
+int f_call(token_t * P_token)
 {
-	printf("funkce f_call\n");
+//	printf("funkce f_call\n");
 	if(P_token->type == T_ID)
 	//simulace pravidla 18
 	{
-		next_token(ToKeN_OrDeR, P_token);
-		return param_group(ToKeN_OrDeR, P_token);
+		if(getToken( P_token) == LEX_ERROR)
+		{
+			return LEX_ERROR;
+		}
+		return param_group( P_token);
 	}
-	printf("funkce f_call: false\n");
-	return false;
+//	printf("funkce f_call: false\n");
+	return SYNT_ERROR;
 }
 
 
 	
 
 
-bool stat(int *ToKeN_OrDeR, t_token * P_token)
+int stat(token_t * P_token)
 {
-	printf("funkce stat\n");
+//	printf("funkce stat\n");
 	if(P_token->type == T_EOL)
 	// simulace pravidla 4
 	{
-		return true;
+		return SUCCES;
 	}
 	else if(P_token->type == T_DEF)
 	//simulace pravidla 5
 	{
-		next_token(ToKeN_OrDeR, P_token);
+		if(getToken( P_token)==LEX_ERROR)
+			return LEX_ERROR;
 		if(P_token->type == T_ID)
 		{
-			next_token(ToKeN_OrDeR, P_token);
+			if(getToken( P_token)==LEX_ERROR)
+				return LEX_ERROR;
 			if(P_token->type == T_L_BRACKET)
 			{
-				next_token(ToKeN_OrDeR, P_token);
-				if( param_list(ToKeN_OrDeR, P_token))
+				if(getToken( P_token)==LEX_ERROR)
+					return LEX_ERROR;
+				if( param_list( P_token)==SUCCES)
 				{
 					if(P_token->type == T_R_BRACKET)
 					{
-						next_token(ToKeN_OrDeR, P_token);
+						if(getToken( P_token)==LEX_ERROR)
+							return LEX_ERROR;
 						if(P_token->type == T_EOL)
 						{
-							next_token(ToKeN_OrDeR, P_token);
-							if( stat_list(ToKeN_OrDeR, P_token) )
+							if(getToken( P_token)==LEX_ERROR)
+							return LEX_ERROR;
+							if( stat_list( P_token)==SUCCES )
 							{
 								if(P_token->type == T_END)
 								{
-									next_token(ToKeN_OrDeR, P_token);
-									return true;
+									if(getToken( P_token)==LEX_ERROR)
+										return LEX_ERROR;
+									return SUCCES;
 								}
 							}
 						}
@@ -335,36 +371,42 @@ bool stat(int *ToKeN_OrDeR, t_token * P_token)
 	else if( is_exp(P_token) )
 	//simulace pravidla 10
 	{
-		return expression(ToKeN_OrDeR, P_token);	
+		return expression( P_token);	
 	}
 	else if(P_token->type == T_IF)
 	//simulace pravidla 11
 	{
-		next_token(ToKeN_OrDeR, P_token);
+		if(getToken( P_token)==LEX_ERROR)
+			return LEX_ERROR;
 		if( is_exp(P_token) )
 		{
-			if( expression(ToKeN_OrDeR, P_token) );
+			if( expression( P_token) )
 			{
-				if(P_token->type == T_THEN);
+				if(P_token->type == T_THEN)
 				{
-					next_token(ToKeN_OrDeR, P_token);
+					if(getToken( P_token)==LEX_ERROR)
+						return LEX_ERROR;
 					if(P_token->type == T_EOL)
 					{
-						next_token(ToKeN_OrDeR, P_token);
-						if( stat_list(ToKeN_OrDeR, P_token) )
+						if(getToken( P_token)==LEX_ERROR)
+							return LEX_ERROR;
+						if( stat_list( P_token)==SUCCES )
 						{
 							if(P_token->type == T_ELSE)
 							{
-								next_token(ToKeN_OrDeR, P_token);
+								if(getToken( P_token)==LEX_ERROR)
+									return LEX_ERROR;
 								if(P_token->type == T_EOL)
 								{
-									next_token(ToKeN_OrDeR, P_token);
-									if( stat_list(ToKeN_OrDeR, P_token) )
+									if(getToken( P_token)==LEX_ERROR)
+										return LEX_ERROR;
+									if( stat_list( P_token)==SUCCES )
 									{
 										if(P_token->type == T_END)
 										{
-											next_token(ToKeN_OrDeR, P_token);
-											return true;
+											if(getToken( P_token)==LEX_ERROR)
+												return LEX_ERROR;
+											return SUCCES;
 										}
 									}
 								}
@@ -378,23 +420,33 @@ bool stat(int *ToKeN_OrDeR, t_token * P_token)
 	else if(P_token->type == T_WHILE)
 	//simulace pravidla 12
 	{
-		next_token(ToKeN_OrDeR, P_token);
+//printf("stat while\n");
+		if(getToken( P_token)==LEX_ERROR)
+		{	
+//	printf("token ee\n");
+			return LEX_ERROR;
+		}		
 		if( is_exp(P_token) )
 		{
-			if( expression(ToKeN_OrDeR, P_token) );
+//printf("hh\n");
+			if( expression( P_token) )
 			{
+//printf("jnsjdnjsni\n");
 				if(P_token->type == T_DO)
 				{
-					next_token(ToKeN_OrDeR, P_token);
+					if(getToken( P_token)==LEX_ERROR)
+						return LEX_ERROR;
 					if(P_token->type == T_EOL)
 					{
-						next_token(ToKeN_OrDeR, P_token);
-						if( stat_list(ToKeN_OrDeR, P_token) )
+						if(getToken( P_token)==LEX_ERROR)
+							return LEX_ERROR;
+						if( stat_list( P_token) == SUCCES )
 						{
 							if(P_token->type == T_END)
 							{
-								next_token(ToKeN_OrDeR, P_token);
-								return true;
+								if(getToken( P_token)==LEX_ERROR)
+									return LEX_ERROR;
+								return SUCCES;
 							}
 						}
 					}
@@ -405,94 +457,77 @@ bool stat(int *ToKeN_OrDeR, t_token * P_token)
 	else if(P_token->type == T_ID)
 	//simulace pravidla 13
 	{
-		printf("funkce stat pravidlo 13\n");
-		next_token(ToKeN_OrDeR, P_token);
-		if( assignment(ToKeN_OrDeR, P_token) )
+//		printf("funkce stat pravidlo 13\n");
+		if(getToken( P_token)==LEX_ERROR)
+			return LEX_ERROR;
+		if( assignment( P_token) ==SUCCES)
 		{
-			printf("stat pravidlo 13: true\n");	
-			return true;
+//			printf("stat pravidlo 13: true\n");	
+			return SUCCES;
 		}
 		
 	}
 
-	printf("funkce stat: false\n");
-	return false;
+//	printf("funkce stat: false %dkoko\n",SYNT_ERROR);
+	return SYNT_ERROR;
 }
 
 
 
 
 
-bool stat_list(int *ToKeN_OrDeR, t_token * P_token)
+int stat_list(token_t * P_token)
 {
-	printf("stat_list\n");
+//	printf("stat_list\n");
 	if( P_token->type == T_DEF || P_token->type == T_IF || P_token->type == T_WHILE || P_token->type == T_EOL ||
 	is_exp(P_token) || P_token->type == T_ID)
 	//simulace pravidla 2
 	{
-		if( stat(ToKeN_OrDeR, P_token) )
+		if( stat( P_token) == SUCCES  )
 		{
 			if(P_token->type == T_EOL)
 			{
-				next_token(ToKeN_OrDeR, P_token);
-				return stat_list(ToKeN_OrDeR, P_token);
+				if(getToken( P_token)==LEX_ERROR)
+					return LEX_ERROR;
+				return stat_list( P_token);
 			}
 		}
 	}
 	else if( P_token->type == T_ELSE || P_token->type == T_END || P_token->type == T_EOF )
 	//simulace pravidla 3
 	  {
-		printf("list vraci true\n");
-		return true;
+//		printf("list vraci true\n");
+		return SUCCES;
 	  }
 	  
-	printf("funkce stat_list: false\n");
-	  return false;
+//	printf("funkce stat_list: false\n");
+	  return SYNT_ERROR;
 }
 
 
 
 
 
-bool prog(int *ToKeN_OrDeR, t_token *P_token)
+int prog(token_t *P_token)
 //funkce si zavola prvni token sama
 {
-	printf("funkce prog\n");
-	next_token(ToKeN_OrDeR, P_token);	//vyjimka tato funkce simuluje startujici neterminal, zavola siprvni token sama
-	bool result = false;	
+	//printf("funkce prog\n");
+	if(getToken( P_token)==LEX_ERROR)
+		return LEX_ERROR;	//vyjimka tato funkce simuluje startujici neterminal, zavola siprvni token sama
+//printf("dostal jsem token\n");
+	int result = SYNT_ERROR;	
 
 	if( P_token->type == T_DEF || P_token->type == T_IF || P_token->type == T_WHILE || P_token->type == T_EOL ||
 	P_token->type == T_EOF || is_exp(P_token) || P_token->type == T_ID )				//is expression by mel byt vzdy volan pred porovnavanim na ID
 	//simulace pravidla 1
 	{
-		if( stat_list(ToKeN_OrDeR, P_token) )
+		if( stat_list( P_token) == SUCCES )
 		{
 			result = (P_token->type == T_EOF);
-		//	next_token(P_token, ToKeN_OrDeRi);  //vyjimka za EOF uz neni dalsi token  
+		//	getToken(P_token, ToKeN_OrDeRi);  //vyjimka za EOF uz neni dalsi token  
 		}
 	}
-
 	return result;
 }
 
 
-
-
-
-int main()
-{
-	bool result;
-	int ToKeN_OrDeR = 0;
-	t_token *P_token;
-	
-	result = prog(&ToKeN_OrDeR, P_token);
-	if(result)
-	{
-		printf("syntakticky je vstup spravne\n");
-	}
-	
-	else
-	{
-		printf("syntakticky je vstup spatne\n");
-	}
-}
