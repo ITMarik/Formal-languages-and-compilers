@@ -18,19 +18,20 @@ typedef enum token_type
 	T_ELSE,	// 5
 	T_END,
 	T_THEN,
+	T_ASSIGNMENT,
 	T_EOL,
 	T_EOF,
-	T_COMMA, // 10
+	T_COMMA, // 11
 	T_STRING,
 	T_INT,
 	T_FLOAT,
 	T_L_BRACKET,
-	T_R_BRACKET, // 15
+	T_R_BRACKET, // 16
 	T_PLUS,
 	T_MINUS,
 	T_MULTIPLICATION,
 	T_DIVISION,
-	T_EQUAL, //20
+	T_EQUAL, //21
 	T_NOT_EQUAL,
 	T_LESS,
 	T_GREATER,
@@ -113,7 +114,7 @@ void next_token(int *ToKeN_OrDeR, t_token *P_token)
 		break; 
 		
 		case 10:
-		P_token->type = T_EQUAL;
+		P_token->type = T_ASSIGNMENT;
 		P_token->p_token_attributes = NULL;
 		break; 
 	
@@ -123,29 +124,45 @@ void next_token(int *ToKeN_OrDeR, t_token *P_token)
 		break; 
 		
 		case 12:
-		P_token->type = T_EOL;
+		P_token->type = T_MINUS;
 		P_token->p_token_attributes = NULL;
 		break; 
 		
 		case 13:
-		P_token->type = T_END;
+		P_token->type = T_INT;
 		P_token->p_token_attributes = NULL;
 		break; 
 		
 		case 14:
-		P_token->type = T_EOL;
+		P_token->type = T_EQUAL;
 		P_token->p_token_attributes = NULL;
 		break;
 		
 		case 15:
-		P_token->type = T_EOF;
+		P_token->type = T_FLOAT;
 		P_token->p_token_attributes = NULL;
 		break; 
 		
 		case 16:
+		P_token->type = T_EOL;
+		P_token->p_token_attributes = NULL;
+		break;
+		
+		case 17:
+		P_token->type = T_END;
+		P_token->p_token_attributes = NULL;
+		break;
+		
+    		case 18:
+		P_token->type = T_EOL;
+		P_token->p_token_attributes = NULL;
+		break;
+		
+		case 19:
 		P_token->type = T_EOF;
 		P_token->p_token_attributes = NULL;
 		break;
+
 
 		default:
 		P_token->type = T_COMMA; 
