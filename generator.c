@@ -3,10 +3,7 @@
  * Soubor :        generator.c - vlastní generování, 3 adresný kód      *
  * Datum :         5.12. 2018                                           *
  * Projekt :       Implementace překladače imperativního jazyka IFJ 18  *
- * Členové týmu :  Martin Janda                                         *
- *              :  Marek Šťastný                                        *
- *              :  Martina Tučková                                      *
- *              :  Martina Jendrálová                                   *
+ * Autoři :        Martin Janda                                         *                                  *
  * Varianta :      Tým 123, varianta I                                  *
  ***********************************************************************/
 
