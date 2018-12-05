@@ -3,22 +3,89 @@
  * Soubor :        generator.c - vlastní generování, 3 adresný kód      *
  * Datum :         5.12. 2018                                           *
  * Projekt :       Implementace překladače imperativního jazyka IFJ 18  *
- * Autoři :        Martin Janda (xjanda27)                              *                                  
+ * Autoři :        Martin Janda                                         *
  * Varianta :      Tým 123, varianta I                                  *
  ***********************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "generator.h"
+#include "err.h"
 
 FILE *generator_result;
+
+void primal_gen() {
+
+  //first head printing with .ifjcode18 input
+  fprintf(generator_result, "%s\n", ".IFJcode18");
+  fprintf(generator_result, "\n#def main()\n");
+
+  //generování dle vestavěných funkcí
+
+  // created by length definition
+  create_something(generator_result, "#length()\n");
+  create_something(LABEL, "$lenght", NULL, NULL);
+  create_something(PUSHFRAME, NULL, NULL, NULL);
+  create_something(DEFVAR, "LF@%retval", NULL, NULL);
+  create_something(STRLEN, "LF@%retval", "LF@par%1", NULL);
+  create_something(POPFRAME, NULL, NULL, NULL);
+  create_something(RETURN, NULL, NULL, NULL);
+
+  // created for intputs, lets take it alphabetical
+
+  //first inputs_f - floats
+
+  fprintf(generator_result, "#input_f()\n");
+  create_something(LABEL, "$input_f", NULL, NULL);
+  create_something(PUSHFRAME, NULL, NULL, NULL);
+  create_something(DEFVAR, "LF@%retval", NULL, NULL);
+  create_something(READ, "LF@%retval", "float", NULL);
+  create_something(POPFRAME, NULL, NULL, NULL);
+  create_something(RETURN, NULL, NULL, NULL);
+
+
+  //second inputs_i - integer
+
+  fprintf(generator_result, "#input_i()\n");
+  create_something(LABEL, "$input_f", NULL, NULL);
+  create_something(PUSHFRAME, NULL, NULL, NULL);
+  create_something(DEFVAR, "LF@%retval", NULL, NULL);
+  create_something(READ, "LF@%retval", "integer", NULL);
+  create_something(POPFRAME, NULL, NULL, NULL);
+  create_something(RETURN, NULL, NULL, NULL);
+
+  //third inputs_s - strings
+
+  fprintf(generator_result, "#input_s()\n");
+  create_something(LABEL, "$input_s", NULL, NULL);
+  create_something(PUSHFRAME, NULL, NULL, NULL);
+  create_something(DEFVAR, "LF@%retval", NULL, NULL);
+  create_something(READ, "LF@%retval", "string", NULL);
+  create_something(POPFRAME, NULL, NULL, NULL);
+  create_something(RETURN, NULL, NULL, NULL);
+
+
+  // the shortest part - main
+  create_something(LABEL, "$$main", NULL, NULL);
+  create_something(CREATEFRAME, NULL, NULL, NULL);
+  create_something(PUSHFRAME, NULL, NULL, NULL);
+
+  // ord inputs
+  fprintf(generator_result, "#ord()\n");
+  create_something(LABEL, "$ord", NULL, NULL);
+  create_something(PUSHFRAME, NULL, NULL, NULL);
+  create_something(DEFVAR, "LF@%retval", NULL, NULL);
+  create_something(READ, "LF@%retval", "string", NULL);
+  create_something(POPFRAME, NULL, NULL, NULL);
+  create_something(RETURN, NULL, NULL, NULL);
+}
 
 int create_something (assembler_calling magic, char *sym1, char *sym2, char *sym3) {
 
 
     //lets get the party started
 
-  if (sym1 == NULL && sym2 == NULL && sym3 == NULL) {     // this case means i have no operands at all, im *ucked up
+  if (sym1 == NULL && sym2 == NULL && sym3 == NULL) {     // this case means i have no operands at all, im ***** up
     switch (magic) {
 
       // instructions which may work without operands
@@ -107,7 +174,7 @@ int create_something (assembler_calling magic, char *sym1, char *sym2, char *sym
       case FLOAT2INT:
         fprintf(generator_result, "%s %s %s\n", "FLOAT2INT", sym1, sym2); break;
       case INT2CHAR:
-        fprintf(generator_result, "%s %s %s\n", "INT2CHAR", sym1; sym2); break;
+        fprintf(generator_result, "%s %s %s\n", "INT2CHAR", sym1, sym2); break;
       case READ:
         fprintf(generator_result, "%s %s %s\n", "READ", sym1, sym2); break;
       case STRLEN:
@@ -135,7 +202,7 @@ int create_something (assembler_calling magic, char *sym1, char *sym2, char *sym
           fprintf(generator_result, "%s %s %s %s\n", "LT", sym1, sym2, sym3); break;
         case GT:
           fprintf(generator_result, "%s %s %s %s\n", "GT", sym1, sym2, sym3); break;
-        case EQ:
+        case EQ:    
           fprintf(generator_result, "%s %s %s %s\n", "EQ", sym1, sym2, sym3); break;
         case AND:
           fprintf(generator_result, "%s %s %s %s\n", "AND", sym1, sym2, sym3); break;
@@ -158,5 +225,5 @@ int create_something (assembler_calling magic, char *sym1, char *sym2, char *sym
       }
     }  
 
-    return vypis_hodnotu(0);  
+    return IS_OK  ;  
 } 

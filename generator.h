@@ -1,6 +1,8 @@
 #ifndef GENERATOR_H
 #define GENERATOR_H
 
+#include "err.h"
+
 typedef enum {
 
 	//work with frames a function calls
@@ -68,6 +70,7 @@ typedef enum {
 
 } assembler_calling;
 
+void primal_gen();  //just generate everything by all forsaken rules
 int create_something(assembler_calling magic, char *sym1, char *sym2, char *sym3);  // calling of instructions by their symbol numbers
 
 #endif
